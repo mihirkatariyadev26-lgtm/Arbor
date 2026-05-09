@@ -1,0 +1,37 @@
+.UserRepolist {
+  height: 95%;
+  border-radius: 2rem;
+  width: 100%;
+  background-color: transparent;
+  padding-top: 1rem;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  /* padding-inline: 1rem; */
+  /* overflow-y: hidden; */
+}
+.-header {
+  margin-top: 1rem;
+  /* text-align: center; */
+  background-color: transparent;
+  font-size: 1.75rem;
+  position: sticky;
+}
+.repo {
+  background-color: transparent;
+  font-size: 1rem;
+  text-align: start;
+  padding-inline: 2rem;
+  padding-block: 1rem;
+  border-radius: 2rem;
+  width: 80%;
+  padding-left: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  align-self: center;
+  margin-left: 0.5rem;
+  border-bottom: 1px solid white;
+  box-shadow: 0 0.25rem 0.25rem rgba(255, 255, 255, 0.447);
+}
+.repo:hover {
+  box-shadow: 0 0vh 2vh rgba(255, 255, 255, 0.511);
+}

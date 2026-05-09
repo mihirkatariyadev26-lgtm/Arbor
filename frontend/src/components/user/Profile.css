@@ -1,0 +1,112 @@
+.userProfilePage {
+  height: 100vh;
+  /* display: inline-block; */
+  justify-content: center;
+}
+#Profilecontainer {
+  display: flex;
+  justify-content: center;
+  background-color: transparent;
+  height: 70%;
+}
+#Profile {
+  height: 100%;
+  margin-top: 2rem;
+  width: 95%;
+  border-radius: 2rem;
+  padding: 1.5rem;
+  box-shadow: 0 0vh 4vh rgba(18, 18, 184, 0.511);
+}
+#side {
+  /* border: 1px solid white; */
+  padding: 0.15rem;
+  border-radius: 1rem;
+
+  box-shadow: 0 0 1rem rgba(255, 255, 255, 0.215);
+}
+#Profile-Grid {
+  padding: 2rem;
+  height: 100%;
+}
+#username {
+  background-color: transparent;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+}
+#username p {
+  /* display: flex; */
+  /* flex-wrap: wrap; */
+  justify-content: center;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: transparent;
+}
+#logo {
+  background-color: transparent;
+  /* border: 1px solid white; */
+  background-color: rgba(255, 255, 255, 0.215);
+  box-shadow: 0 0 1vh rgba(255, 255, 255, 0.215);
+
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding-left: 1rem;
+  border-radius: 1rem;
+  padding-block: 0.5rem;
+}
+
+/*the drawer section*/
+
+.drawer {
+  /* border: 1px solid white; */
+  display: flex;
+  justify-content: center;
+  width: 90%;
+  align-items: baseline;
+  border-radius: 1rem;
+  padding-block: 0.75rem;
+  margin-inline: 1rem;
+  background-color: transparent;
+  font-size: 1.25rem;
+}
+.drawer:hover {
+  box-shadow: 0 0 1vh white;
+  background-color: white;
+  color: black;
+  font-weight: 700;
+}
+/*Right Pannel*/
+#MainPannel {
+  /* border: 1px solid white; */
+  height: 100%;
+  border-radius: 1rem;
+  box-shadow: 0 0 3vh rgba(255, 255, 255, 0.215);
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.userRepo {
+  /* border: 1px solid white; */
+  width: 90%;
+  height: 85%;
+  overflow-y: scroll;
+  /* overflow-x: hidden; */
+  display: flex;
+  flex-wrap: wrap;
+  scrollbar-width: none;
+
+  justify-content: center;
+}
+.repository {
+  width: 90%;
+  border: 1px solid white;
+  margin-block: 1rem;
+  border-radius: 1rem;
+  padding-inline: 2.5rem;
+  padding-block: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+}

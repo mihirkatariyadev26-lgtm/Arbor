@@ -27,7 +27,7 @@ const signup = async (req, res) => {
     const token = jwt.sign({ id: result._id }, process.env.JWT_SECREAT_KEY, {
       expiresIn: "72hr",
     });
-    res.json({ token, userId: result.insertid });
+    res.json({ token, userId: result.insertid, userName: result.username });
   } catch (e) {
     console.error("Error during signup", e.message);
     res.status(500).send({ message: "server error" });
@@ -47,7 +47,7 @@ const login = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECREAT_KEY, {
       expiresIn: "72hr",
     });
-    res.json({ token, userId: user._id });
+    res.json({ token, userId: user._id, userName: user.username });
   } catch (e) {
     console.error("error in login", e.message);
     res.status(500).send({ message: "server error" });

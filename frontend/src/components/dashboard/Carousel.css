@@ -1,0 +1,226 @@
+/* Container and Layout */
+.carousel-wrapper {
+  padding: 40px 20px;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  max-width: 1200px;
+  display: flex;
+  background-color: transparent;
+  align-items: center;
+}
+
+/* Scrollable Viewport */
+.carousel-view {
+  display: flex;
+  gap: 20px;
+  height: 80%;
+  border-radius: 1.25rem;
+  overflow-x: auto;
+  align-items: center;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory; /* The "Beautiful" snapping effect */
+  padding: 20px;
+  background-color: transparent;
+  width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for IE/Edge */
+}
+
+.carousel-view::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+/* Individual Cards */
+.carousel-card {
+  flex: 0 0 670px; /* Default desktop width */
+  height: 100%;
+  width: 100%;
+  border-radius: 2rem;
+  scroll-snap-align: center;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  background-color: transparent;
+  color: white;
+  /* box-shadow: 0 0 24px rgba(234, 234, 234, 0.851); */
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+
+  justify-content: center;
+}
+
+.carousel-card:hover {
+  box-shadow: 0 0vh 2vh rgba(18, 18, 184, 0.511);
+}
+
+.card-btn {
+  margin-top: 15px;
+  padding: none;
+  border: none;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+/* Control Buttons */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  border: none;
+  background: white;
+  color: #333;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.left {
+  left: -15px;
+}
+.right {
+  right: -15px;
+}
+
+/* --- Responsive Breakpoints --- */
+
+@media (max-width: 1024px) {
+  .carousel-card {
+    flex: 0 0 250px;
+    height: 350px;
+  }
+}
+
+@media (max-width: 768px) {
+  .carousel-card {
+    flex: 0 0 75%; /* Show part of the next card to encourage swiping */
+  }
+
+  .nav-btn {
+    width: 35px;
+    height: 35px;
+    font-size: 16px;
+  }
+
+  .left {
+    left: 5px;
+  }
+  .right {
+    right: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .carousel-card {
+    flex: 0 0 85%;
+  }
+
+  /* Hide buttons on tiny screens to save space; users will swipe */
+  .nav-btn {
+    display: none;
+  }
+}
+.Repo-detail {
+  height: 90%;
+  width: 100%;
+  border-radius: 2rem;
+  padding: 1rem;
+  background-color: rgb(0, 0, 0);
+}
+.Repo-detail p {
+  font-size: 0.95rem;
+  padding-inline: 1.5rem;
+  padding-block: 0.75rem;
+  width: fit-content;
+  border-radius: 1rem;
+  background-color: #000000;
+  border: 1px solid white;
+}
+.Repo-detail p:hover {
+  box-shadow: 0 0vh 5vh rgba(18, 18, 184, 0.511);
+  cursor: auto;
+}
+.repo {
+  height: fit-content;
+  width: 100%;
+}
+.top {
+  background-color: transparent;
+  display: flex;
+  justify-content: space-between;
+}
+.repo-description {
+  height: fit-content;
+  margin-top: 1.25rem;
+  padding-top: 0.05rem;
+  padding-left: 0.5rem;
+  padding-bottom: 1rem;
+  background-color: transparent;
+  border: 1.75px solid white;
+  border-radius: 1rem;
+  /* filter: brightness(5rem); */
+}
+.repo-description p {
+  margin-top: 1rem;
+  border: 1px solid white;
+  background-color: transparent;
+  font-size: 1.25rem;
+  border-radius: 2rem;
+  letter-spacing: 1px;
+  padding-inline: 3rem;
+}
+.description {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  background-color: transparent;
+}
+.repo-issue {
+  margin-top: 1rem;
+  background-color: transparent;
+}
+.repo-issue p {
+  background-color: transparent;
+  padding-inline: 3rem;
+  font-size: 1.25rem;
+  border-radius: 2rem;
+}
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: transparent;
+}
+.Issue-Page {
+  background-color: transparent;
+  padding: 1rem;
+  width: 45%;
+  justify-content: center;
+  display: flex;
+  font-size: 1.25rem;
+  /* padding-left: 0.75rem; */
+  /* border: 1px solid white; */
+  margin-top: 1rem;
+  border-radius: 2rem;
+  margin-right: 1rem;
+}
+.Issue-Page:hover {
+  cursor: pointer;
+  background-color: forestgreen;
+  box-shadow: 0px 0px 2vh forestgreen;
+}

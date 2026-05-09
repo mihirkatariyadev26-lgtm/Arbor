@@ -2,12 +2,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  /* z-index: 100; */
   background-color: transparent;
 }
 .navbar {
   height: 10vh;
   width: 95%;
   padding: 1rem;
+  z-index: 100;
   margin-top: 1rem;
   /* margin-left: 2rem; */
   /* border: 1px solid white; */
@@ -18,11 +20,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.045);
+  /* border: 2px solid white; */
+  background-color: rgba(0, 0, 0, 0.656);
 }
 .navbar:hover {
-  /* background-color : rgba(0, 255, 255, 0.192); */
-  box-shadow: 0 0vh 1vh rgba(18, 18, 184, 0.511);
+  /* background-color: rgba(255, 255, 255, 0.215); */
+  box-shadow: 0 0vh 4vh rgba(18, 18, 184, 0.511);
 }
 .Logo {
   display: flex;
@@ -33,6 +36,7 @@
   background-color: transparent;
 }
 .Name {
+  /* filter: blur(2); */
   display: flex;
   background-color: transparent;
   font-size: 3rem;
@@ -69,12 +73,17 @@
   padding-inline: 1rem;
   height: fit-content;
   align-items: center;
+  padding-block: 0.25rem;
 }
 .option:hover {
   cursor: pointer;
-  background-color: 10px 20px 10px #1212b8d6;
-
+  background-color: white;
+  color: black;
   box-shadow:
     0 0 00px rgba(255, 255, 255, 0.805),
-    0 0 50px rgba(255, 255, 255, 0.805);
+    0 0 2vh white;
+}
+.scroll p {
+  background-color: transparent;
+  font-size: 1.5rem;
 }

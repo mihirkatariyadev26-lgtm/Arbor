@@ -14,6 +14,7 @@ function Login() {
   const [loading, setLoading] = useState(false);
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (loading) return;
     try {
       setLoading(true);
       const res = await axios.post("http://localhost:3000/login", {
@@ -22,8 +23,10 @@ function Login() {
       });
       const token = res.data.token;
       const userId = res.data.userId;
+      const userName = res.data.userName;
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
+      localStorage.setItem("userName", userName);
       setCurrentUser(userId);
       setLoading(false);
       navigate("/dashboard");
@@ -45,6 +48,7 @@ function Login() {
                 id="filled-basic"
                 label="Email"
                 value={email}
+                required
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -55,6 +59,7 @@ function Login() {
               <TextField
                 id="filled-basic"
                 type="password"
+                required
                 label="Password"
                 variant="filled"
                 value={password}

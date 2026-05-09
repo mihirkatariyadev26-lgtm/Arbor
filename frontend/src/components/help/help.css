@@ -1,0 +1,21 @@
+.list {
+  height: 100%;
+  width: 90%;
+  font-size: 1rem;
+  border-radius: 2rem;
+  padding-left: 1.5rem;
+  background-color: transparent;
+}
+.header {
+  font-size: 2.5rem;
+  background-color: transparent;
+}
+.step {
+  background-color: transparent;
+  border-radius: 2rem;
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+}
+.step:hover {
+  box-shadow: 0 0vh 2vh rgba(255, 255, 255, 0.511);
+}

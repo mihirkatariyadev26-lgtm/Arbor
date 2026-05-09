@@ -24,7 +24,10 @@ const ProjectRoutes = () => {
     ) {
       navigate("/auth");
     }
-    if (token && window.location.pathname === "/auth") {
+    if (
+      (token && window.location.pathname === "/auth") ||
+      (token && window.location.pathname === "/signup")
+    ) {
       navigate("/");
     }
   }, [currentUser, navigate, setCurrentUser]);
@@ -34,7 +37,7 @@ const ProjectRoutes = () => {
     { path: "/auth", element: <Login /> },
     { path: "/signup", element: <Signup /> },
     { path: "/dashboard", element: <Dashboard /> },
-    {path:"/RepoForm",element:<CreateRepo/>},
+    { path: "/RepoForm", element: <CreateRepo /> },
     { path: "/profile", element: <Profile /> },
   ]);
   return element;

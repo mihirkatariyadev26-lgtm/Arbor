@@ -37,7 +37,7 @@ const createRepository = async (req, res) => {
 
 const getAllRepository = async (req, res) => {
   try {
-    const repositories = await Repository.find({})
+    const repositories = await Repository.find({ visibility: true })
       .populate("owner")
       .populate("issues");
     res.json(repositories);
@@ -74,16 +74,28 @@ const getRepositoryByName = async (req, res) => {
   }
 };
 const fetchRepositoriesForCurrentUser = async (req, res) => {
-  const { userId } = req.user;
+  const { userid } = req.params;
+
+  // Validate userid is a valid MongoDB ObjectId
+  if (!mongoose.Types.ObjectId.isValid(userid)) {
+    return res.status(400).json({ error: "Invalid user id format" });
+  }
+
   try {
-    const repositories = await Repository.find({ owner: userId });
-    if (!repositories || repositories.length == 0) {
-      return res.status(404).send("No repositories found!");
+    const repositories = await Repository.find({ owner: userid })
+      .populate("owner", "-password")
+      .populate("issues");
+
+    if (!repositories || repositories.length === 0) {
+      return res.status(404).json({ message: "No repositories found!" });
     }
+
     return res.json(repositories);
-  } catch (E) {
-    console.log("error during fetching user repository", E);
-    return res.status(500).send("Internal server error");
+  } catch (error) {
+    console.log("error during fetching user repository", error);
+    return res
+      .status(500)
+      .json({ error: "Internal server error", details: error.message });
   }
 };
 const updateRepositoryByID = async (req, res) => {

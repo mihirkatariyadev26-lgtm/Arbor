@@ -1,6 +1,6 @@
 .Dashboard {
   height: 100vh;
-  width: 100vw;
+  /* width: 100vw; */
 }
 .grid {
   display: grid;
@@ -50,22 +50,24 @@
 }
 
 .profile-icon {
-  border: 1px solid white;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 50%;
-  background-size: cover;
-  background-image: url("/Profile_1.png");
+  /* border: 1px solid white; */
+  /* width: 2rem; */
+  /* height: 2rem; */
+  /* border-radius: 50%; */
+  /* background-size: cover; */
+  background-color: transparent;
+  /* background-image: url("/Profile_1.png"); */
 }
 
 .username {
   font-size: 1.25rem;
   padding: 0.25rem;
+  margin-left: 0.5rem;
   background-color: transparent;
 }
 .profile {
   padding: 0.5rem;
-
+  background-color: transparent;
   /* padding-inline: 1.25rem; */
   align-items: center;
   border-radius: 2rem;

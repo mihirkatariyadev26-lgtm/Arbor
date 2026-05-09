@@ -16,6 +16,7 @@ function Signup() {
   const { setCurrentUser } = useAuth();
   const handleSignUp = async (e) => {
     e.preventDefault();
+    if (loading) return;
     try {
       setLoading(true);
       const res = await axios.post("http://localhost:3000/signup", {
@@ -27,6 +28,7 @@ function Signup() {
       const userId = res.data.userId;
       localStorage.setItem("token", token);
       localStorage.setItem("userId", userId);
+      localStorage.setItem("userName", userName);
       setCurrentUser(res.data.userId);
       setLoading(false);
       navigate("/dashboard");
@@ -45,6 +47,7 @@ function Signup() {
             <h2>SignUp</h2>
             <div className="field">
               <TextField
+                required
                 id="filled-basic"
                 label="Email"
                 type="email"
@@ -57,6 +60,7 @@ function Signup() {
             </div>
             <div className="field">
               <TextField
+                required
                 id="filled-basic"
                 value={userName}
                 onChange={(e) => {
@@ -68,6 +72,7 @@ function Signup() {
             </div>
             <div className="field">
               <TextField
+                required
                 id="filled-basic"
                 type="password"
                 value={password}

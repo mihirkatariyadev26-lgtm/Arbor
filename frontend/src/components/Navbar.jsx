@@ -1,9 +1,12 @@
 import React from "react";
 import "./navbar.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
+import DotGrid from "./hero.jsx";
 import { useState, useEffect } from "react";
 function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isLogedin, setIsLogedin] = useState(false);
   useEffect(() => {
     setIsLogedin(!!localStorage.getItem("token"));
@@ -50,15 +53,17 @@ function Navbar() {
               </>
             )}
 
-            <div
-              className="option"
-              onClick={() => {
-                localStorage.getItem("token")
-                  ? navigate("/dashboard")
-                  : navigate("/auth");
-              }}>
-              Get Started
-            </div>
+            {location.pathname !== "/dashboard" && (
+              <div
+                className="option"
+                onClick={() => {
+                  localStorage.getItem("token")
+                    ? navigate("/dashboard")
+                    : navigate("/auth");
+                }}>
+                Dashborard
+              </div>
+            )}
           </div>
         </div>
       </div>

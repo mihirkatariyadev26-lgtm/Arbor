@@ -131,3 +131,25 @@ h3 {
 .css-1lgyuji-MuiGrid-root:hover {
   box-shadow: 0 0vh 2vh rgba(255, 255, 255, 0.511);
 }
+.scroll {
+  padding: 1rem;
+}
+.visibility {
+  height: 2rem;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  font-size: 1.25rem;
+  margin-left: 1rem;
+  width: 83%;
+}
+.toggle {
+  display: flex;
+  align-items: center;
+  margin-left: 1.25rem;
+  font-size: 1.25rem;
+  background-color: transparent;
+}
+.toggle label {
+  background-color: transparent;
+}

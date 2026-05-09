@@ -5,7 +5,6 @@ export const reporouter = express.Router();
 
 reporouter.post("/repo/create", repositoryController.createRepository);
 reporouter.get("/repo/all", repositoryController.getAllRepository);
-reporouter.get("/repo/:id", repositoryController.getRepositoryByID);
 reporouter.get("/repo/name/:name", repositoryController.getRepositoryByName);
 reporouter.get(
   "/repo/user/:userid",
@@ -16,4 +15,5 @@ reporouter.delete(
   "/repo/delete/:id",
   repositoryController.deleteRepositoryByID,
 );
+reporouter.get("/repo/:id", repositoryController.getRepositoryByID);
 reporouter.patch("/repo/toggle/:id", repositoryController.toggleVisibilityByID);

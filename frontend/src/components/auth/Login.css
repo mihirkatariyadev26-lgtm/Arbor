@@ -62,7 +62,7 @@
 .btn:hover {
   box-shadow:
     0 0 0px #1212b8d6,
-    0 0 50px #1212b8d6;
+    0 0 10px #1212b8d6;
 }
 
 .form p {
