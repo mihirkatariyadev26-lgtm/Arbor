@@ -11,6 +11,8 @@ import axios from "axios";
 import DeleteIcon from "@mui/icons-material/Delete";
 import PublicIcon from "@mui/icons-material/Public";
 import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
+import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
+import { useNavigate } from "react-router-dom";
 function stringToColor(string) {
   let hash = 0;
   let i;
@@ -52,6 +54,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [userRepo, setUserRepo] = useState([]);
   const userID = localStorage.getItem("userId");
+  const Navigate = useNavigate();
   useEffect(() => {
     const fetchUserRepo = async () => {
       try {
@@ -85,6 +88,7 @@ function Profile() {
       setLoading(false);
     }
   };
+
   return (
     <>
       <div className="userProfilePage">
@@ -110,7 +114,7 @@ function Profile() {
                           textWrap: "wrap",
                           textSizeAdjust: "auto",
                         }}>
-                        UID: {userID}
+                        UID : {userID}
                       </span>
                     </p>
                   </Stack>
@@ -162,13 +166,32 @@ function Profile() {
                           </div>
                           <div>
                             Issues :{e.issues.length}
-                            <div
-                              className="deleteRepo"
-                              style={{ display: "flex", alignItems: "center" }}
-                              onClick={() => {
-                                handleDelete(e._id);
-                              }}>
-                              <DeleteIcon></DeleteIcon>Delete
+                            <div className="deleteRepo">
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  marginTop: "0.25rem",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => {
+                                  handleDelete(e._id);
+                                }}>
+                                <DeleteIcon></DeleteIcon>Delete
+                              </div>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  marginTop: "0.25rem",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() => {
+                                  Navigate(`/Edit/${e._id}`);
+                                }}>
+                                <BorderColorOutlinedIcon />
+                                Edit
+                              </div>
                             </div>
                           </div>
                         </div>

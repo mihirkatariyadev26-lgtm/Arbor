@@ -12,6 +12,7 @@ function CreateRepo() {
   const [description, setDescription] = useState("");
   const [visibility, setVisibility] = useState(null);
   const [valid, setValid] = useState(true);
+  const [content, setContent] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const handleVisibility = (e) => {
@@ -29,7 +30,7 @@ function CreateRepo() {
           description: description,
           visibility: visibility,
           owner: localStorage.getItem("userId"),
-          content: [],
+          content: [content],
           issues: [],
         });
         setValid(true);
@@ -69,6 +70,17 @@ function CreateRepo() {
               variant="filled"
               onChange={(e) => {
                 setDescription(e.target.value);
+              }}
+            />
+          </div>
+          <div className="field">
+            <TextField
+              required
+              id="filled-basic"
+              label="Content"
+              variant="filled"
+              onChange={(e) => {
+                setContent(e.target.value);
               }}
             />
           </div>

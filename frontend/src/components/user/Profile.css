@@ -15,14 +15,14 @@
   width: 95%;
   border-radius: 2rem;
   padding: 1.5rem;
-  box-shadow: 0 0vh 4vh rgba(18, 18, 184, 0.511);
+  box-shadow: 0 0vh 2vh rgba(18, 18, 184, 0.511);
 }
 #side {
   /* border: 1px solid white; */
   padding: 0.15rem;
   border-radius: 1rem;
 
-  box-shadow: 0 0 1rem rgba(255, 255, 255, 0.215);
+  box-shadow: 0 0 2vh rgba(255, 255, 255, 0.215);
 }
 #Profile-Grid {
   padding: 2rem;
@@ -47,7 +47,7 @@
   background-color: transparent;
   /* border: 1px solid white; */
   background-color: rgba(255, 255, 255, 0.215);
-  box-shadow: 0 0 1vh rgba(255, 255, 255, 0.215);
+  box-shadow: 0 0 2vh rgba(255, 255, 255, 0.215);
 
   width: 100%;
   display: flex;
@@ -97,6 +97,7 @@
   display: flex;
   flex-wrap: wrap;
   scrollbar-width: none;
+  /* scrollbar-track-color: none; */
 
   justify-content: center;
 }

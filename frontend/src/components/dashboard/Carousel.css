@@ -38,7 +38,7 @@
 
 /* Individual Cards */
 .carousel-card {
-  flex: 0 0 670px; /* Default desktop width */
+  flex: 0 0 100%;
   height: 100%;
   width: 100%;
   border-radius: 2rem;
@@ -167,7 +167,7 @@
 }
 .repo-description {
   height: fit-content;
-  margin-top: 1.25rem;
+  margin-top: 0.5rem;
   padding-top: 0.05rem;
   padding-left: 0.5rem;
   padding-bottom: 1rem;
@@ -177,16 +177,16 @@
   /* filter: brightness(5rem); */
 }
 .repo-description p {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   border: 1px solid white;
   background-color: transparent;
-  font-size: 1.25rem;
+  font-size: 1rem;
   border-radius: 2rem;
   letter-spacing: 1px;
-  padding-inline: 3rem;
+  padding-inline: 2rem;
 }
 .description {
-  margin-top: 1rem;
+  margin-top: 0.5rem;
   margin-left: 1rem;
   background-color: transparent;
 }
@@ -196,8 +196,8 @@
 }
 .repo-issue p {
   background-color: transparent;
-  padding-inline: 3rem;
-  font-size: 1.25rem;
+  padding-inline: 2rem;
+  font-size: 0.75rem;
   border-radius: 2rem;
 }
 .button {
@@ -215,7 +215,7 @@
   font-size: 1.25rem;
   /* padding-left: 0.75rem; */
   /* border: 1px solid white; */
-  margin-top: 1rem;
+  margin-top: 0.25rem;
   border-radius: 2rem;
   margin-right: 1rem;
 }

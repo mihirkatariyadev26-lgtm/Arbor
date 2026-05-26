@@ -7,26 +7,82 @@ const Carousel = () => {
   const scrollRef = useRef(null);
   const [repoData, setRepodata] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isStared, setIsStared] = useState(false);
+  const [staredRepos, setStaredRepos] = useState(() => {
+    const saved = localStorage.getItem("starRepos");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const map = {};
+        parsed.forEach((id) => {
+          map[id] = true;
+        });
+        return map;
+      } catch (e) {
+        console.log("Failed to parse starRepos from localStorage", e);
+      }
+    }
+    return {};
+  });
   useEffect(() => {
     const fetchReposData = async () => {
       try {
         setLoading(true);
         const res = await axios.get("http://localhost:3000/repo/all");
         setRepodata(res.data);
-        setLoading(false);
-        console.log(res.data);
       } catch (e) {
         console.log("Error to get All repository", e);
         setRepodata([]);
       } finally {
-        // console.log(repoData);
         setLoading(false);
       }
     };
-    fetchReposData();
-  }, []);
 
+    const fetchUserStars = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        if (!userId) return;
+        const res = await axios.get(
+          `http://localhost:3000/getUserProfile/${userId}`,
+        );
+        const user = res.data;
+        if (user.starRepos && Array.isArray(user.starRepos)) {
+          localStorage.setItem("starRepos", JSON.stringify(user.starRepos));
+          const map = {};
+          user.starRepos.forEach((id) => {
+            map[id] = true;
+          });
+          setStaredRepos(map);
+        }
+      } catch (e) {
+        console.log("Error getting user profile", e);
+      }
+    };
+
+    fetchReposData();
+    fetchUserStars();
+  }, []);
+  const handelStarRepo = async (id) => {
+    try {
+      const res = await axios.post("http://localhost:3000/repo/star", {
+        repoId: id,
+        userId: localStorage.getItem("userId"),
+      });
+      const updatedUser = res.data;
+      if (updatedUser.starRepos && Array.isArray(updatedUser.starRepos)) {
+        localStorage.setItem(
+          "starRepos",
+          JSON.stringify(updatedUser.starRepos),
+        );
+        const map = {};
+        updatedUser.starRepos.forEach((repoId) => {
+          map[repoId] = true;
+        });
+        setStaredRepos(map);
+      }
+    } catch (e) {
+      console.log("Error in staring repository", e);
+    }
+  };
   const scroll = (direction) => {
     if (scrollRef.current) {
       const { current } = scrollRef;
@@ -63,8 +119,8 @@ const Carousel = () => {
                 }}>
                 <div className="Repo-detail">
                   <div className="top">
-                    <p>Repository Name: {e.name}</p>
-                    <p>Published By: {e.owner.username}</p>
+                    <p>Repository Name : {e.name}</p>
+                    <p>Published By : {e.owner.username}</p>
                   </div>
 
                   <div className="repo-description">
@@ -75,8 +131,8 @@ const Carousel = () => {
                         alignItems: "center",
                         backgroundColor: "transparent",
                       }}>
-                      <p>Description: </p>
-                      {!isStared ? (
+                      <p>Description : </p>
+                      {!staredRepos[e._id] ? (
                         <StarBorderOutlinedIcon
                           style={{
                             justifyContent: "center",
@@ -84,7 +140,7 @@ const Carousel = () => {
                             fontSize: "2rem",
                             marginRight: "1rem",
                           }}
-                          onClick={() => setIsStared(!isStared)}
+                          onClick={() => handelStarRepo(e._id)}
                         />
                       ) : (
                         <StarOutlinedIcon
@@ -94,11 +150,29 @@ const Carousel = () => {
                             fontSize: "2rem",
                             marginRight: "1rem",
                           }}
-                          onClick={() => setIsStared(!isStared)}
+                          onClick={() => handelStarRepo(e._id)}
                         />
                       )}
                     </span>
-                    <div className="description">{e.description}</div>
+                    <div
+                      className="description"
+                      style={{ textOverflow: "clip" }}>
+                      {e.description}
+                    </div>
+                    <div
+                      className="description"
+                      style={{ marginLeft: "0", alignItems: "center" }}>
+                      <p>Content: </p>
+                      <span
+                        style={{
+                          marginInline: "0.75rem",
+                          display: "inline-block",
+                          paddingTop: "0.5rem",
+                          textOverflow: "clip",
+                        }}>
+                        {e.content}
+                      </span>
+                    </div>
                     <div className="repo-issue">
                       <p>Issues : {e.issues.length}</p>
                     </div>
