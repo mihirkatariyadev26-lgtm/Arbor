@@ -17,3 +17,4 @@ reporouter.delete(
 );
 reporouter.get("/repo/:id", repositoryController.getRepositoryByID);
 reporouter.patch("/repo/toggle/:id", repositoryController.toggleVisibilityByID);
+reporouter.post("/repo/star", repositoryController.starRepository);

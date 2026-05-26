@@ -106,7 +106,7 @@ const updateRepositoryByID = async (req, res) => {
     if (!repository) {
       return res.send("repository doesn't exists");
     }
-    repository.content.push(content);
+    repository.content = content;
     repository.description = description;
     const updatedRepository = await repository.save();
     return res.json({ message: "Repository Updated", updatedRepository });
@@ -146,6 +146,30 @@ const deleteRepositoryByID = async (req, res) => {
     return res.status(500).send("Internal server error");
   }
 };
+const starRepository = async (req, res) => {
+  const { repoId, userId } = req.body;
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const isStarred = user.starRepos.some(
+      (id) => id.toString() === repoId.toString(),
+    );
+
+    const update = isStarred
+      ? { $pull: { starRepos: repoId } }
+      : { $addToSet: { starRepos: repoId } };
+
+    const updatedUser = await User.findByIdAndUpdate(userId, update, {
+      new: true,
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+};
 export const repositoryController = {
   createRepository,
   getAllRepository,
@@ -155,4 +179,5 @@ export const repositoryController = {
   updateRepositoryByID,
   toggleVisibilityByID,
   deleteRepositoryByID,
+  starRepository,
 };
