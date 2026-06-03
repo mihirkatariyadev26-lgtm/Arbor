@@ -170,7 +170,7 @@ function Dashboard() {
             <div
               className="profile"
               onClick={() => {
-                navigate("/profile");
+                navigate(`/profile/${localStorage.getItem("userId")}`);
               }}>
               <div className="profile-icon">
                 <Stack

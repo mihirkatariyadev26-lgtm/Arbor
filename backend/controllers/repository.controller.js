@@ -116,11 +116,12 @@ const updateRepositoryByID = async (req, res) => {
   }
 };
 const toggleVisibilityByID = async (req, res) => {
-  const { id } = req.params.id;
+  const { id } = req.params;
   try {
     const repository = await Repository.findById(id);
+    // console.log(id);
     if (!repository) {
-      return res.send("Repository doent Exist");
+      return res.status(404).send("Repository doent Exist");
     }
     repository.visibility = !repository.visibility;
     const updatedRepository = await repository.save();

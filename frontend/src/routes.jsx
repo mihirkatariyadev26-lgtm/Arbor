@@ -41,6 +41,7 @@ const ProjectRoutes = () => {
     { path: "/RepoForm", element: <CreateRepo /> },
     { path: "/profile", element: <Profile /> },
     { path: "/Edit/:id", element: <EditRepo /> },
+    { path: "/profile/:id", element: <Profile /> },
   ]);
   return element;
 };

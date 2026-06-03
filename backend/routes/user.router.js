@@ -7,3 +7,5 @@ userRouter.post("/login", UserController.login);
 userRouter.get("/getUserProfile/:id", UserController.getUserProfile);
 userRouter.put("/updateProfile/:id", UserController.updateProfile);
 userRouter.delete("/deleteUserProfile/:id", UserController.deleteUserProfile);
+userRouter.post("/user/follow", UserController.followUser);
+userRouter.post("/user/unfollow", UserController.unfollowUser);

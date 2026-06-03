@@ -25,7 +25,7 @@ const signup = async (req, res) => {
 
     const result = await newUser.save();
     const token = jwt.sign({ id: result._id }, process.env.JWT_SECREAT_KEY, {
-      expiresIn: "72hr",
+      expiresIn: "1hr",
     });
     res.json({ token, userId: result.insertid, userName: result.username });
   } catch (e) {
@@ -112,6 +112,58 @@ const deleteUserProfile = async (req, res) => {
     res.status(500).send("Internal server error");
   }
 };
+//TODO:handle edge Case If both id same then Send error
+const unfollowUser = async (req, res) => {
+  const { currentUser, followingUser } = req.body;
+  if (!currentUser || !followingUser) {
+    return res.status(400).json({ message: "Invalid Request" });
+  }
+  if (currentUser == followingUser) {
+    return res.status(400).json({ message: "Invalid Request" });
+  }
+  try {
+    const user = await User.findById(currentUser);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    user.followedUsers = user.followedUsers.filter(
+      (id) => id.toString() !== followingUser.toString(),
+    );
+    await user.save();
+    return res.json(user);
+  } catch (e) {
+    console.error("Error in Unfollowing", e);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
+
+const followUser = async (req, res) => {
+  const { currentUser, followingUser } = req.body;
+  if (!currentUser || !followingUser) {
+    return res.status(400).json({ message: "Invalid Request" });
+  }
+  if (currentUser == followingUser) {
+    return res.status(400).json({ message: "Invalid Request" });
+  }
+  try {
+    const user = await User.findById(currentUser);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    const isFollowing = user.followedUsers.some(
+      (id) => id.toString() === followingUser.toString()
+    );
+    if (isFollowing) {
+      return await unfollowUser(req, res);
+    }
+    user.followedUsers.push(followingUser);
+    await user.save();
+    return res.json(user);
+  } catch (e) {
+    console.error("Error in Following", e);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 export const UserController = {
   getAllUser,
   signup,
@@ -119,4 +171,6 @@ export const UserController = {
   getUserProfile,
   updateProfile,
   deleteUserProfile,
+  followUser,
+  unfollowUser,
 };

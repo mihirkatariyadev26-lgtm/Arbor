@@ -20,18 +20,23 @@
 #side {
   /* border: 1px solid white; */
   padding: 0.15rem;
+  display: grid;
+  grid-column: 2;
   border-radius: 1rem;
-
+  justify-content: center;
   box-shadow: 0 0 2vh rgba(255, 255, 255, 0.215);
 }
 #Profile-Grid {
   padding: 2rem;
   height: 100%;
+  display: flex;
+  min-width: fit-content;
+  flex-wrap: wrap;
 }
 #username {
   background-color: transparent;
   font-size: 1.25rem;
-  display: flex;
+  /* display: flex; */
   align-items: center;
   padding: 0.5rem;
 }
@@ -47,9 +52,11 @@
   background-color: transparent;
   /* border: 1px solid white; */
   background-color: rgba(255, 255, 255, 0.215);
+
   box-shadow: 0 0 2vh rgba(255, 255, 255, 0.215);
 
-  width: 100%;
+  max-width: 95%;
+  min-width: fit-content;
   display: flex;
   align-items: center;
   padding-left: 1rem;
@@ -63,8 +70,10 @@
   /* border: 1px solid white; */
   display: flex;
   justify-content: center;
-  width: 90%;
-  align-items: baseline;
+  width: 95%;
+  /* height: fit-content; */
+  /* align-items: end; */
+  margin-bottom: 0px;
   border-radius: 1rem;
   padding-block: 0.75rem;
   margin-inline: 1rem;
@@ -76,6 +85,17 @@
   background-color: white;
   color: black;
   font-weight: 700;
+  cursor: pointer;
+}
+.follow:hover {
+  background-color: forestgreen;
+  color: whitesmoke;
+  box-shadow: 0 0 4vh forestgreen;
+}
+.unfollow:hover {
+  background-color: rgb(172, 18, 18);
+  color: whitesmoke;
+  box-shadow: 0 0 4vh rgb(253, 28, 28);
 }
 /*Right Pannel*/
 #MainPannel {
@@ -108,6 +128,34 @@
   border-radius: 1rem;
   padding-inline: 2.5rem;
   padding-block: 1.5rem;
-  display: flex;
+  height: fit-content;
+
   justify-content: space-between;
+}
+.repository:hover {
+  border: 1px solid transparent;
+  background-color: rgba(240, 248, 255, 0.152);
+}
+.deleteRepo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  margin-right: 0px;
+  height: fit-content;
+}
+.css-rizt0-MuiTypography-root {
+  background-color: transparent;
+}
+.css-12xagqm-MuiSwitchBase-root {
+  background-color: transparent !important;
+}
+.css-aqlqb4-MuiButtonBase-root-MuiSwitchBase-root-MuiSwitch-switchBase {
+  background-color: transparent !important;
+}
+.css-19opgx6-MuiFormControlLabel-root {
+  background-color: transparent !important;
+}
+.css-rehya9-MuiSwitch-root {
+  background-color: transparent !important;
 }

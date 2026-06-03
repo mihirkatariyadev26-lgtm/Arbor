@@ -2,7 +2,12 @@ import React from "react";
 import "./help.css";
 function Help() {
   return (
-    <ul className="list">
+    <ul
+      className="list"
+      style={{
+        overflowY: "scroll",
+        scrollbarWidth: "none",
+      }}>
       <p className="header">Guide to use Application</p>
       <li className="step">
         index.js init <br />

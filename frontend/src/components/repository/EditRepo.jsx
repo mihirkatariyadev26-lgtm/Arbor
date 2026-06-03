@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Navbar from "../Navbar";
@@ -11,7 +12,7 @@ function EditRepo() {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const { id: repoID } = useParams();
-
+  const navigate = useNavigate();
   useEffect(() => {
     const getData = async () => {
       if (!repoID) return;
@@ -39,6 +40,7 @@ function EditRepo() {
       );
       console.log(res);
       setLoading(false);
+      navigate("/Dashboard");
     } catch (e) {
       console.log(e);
       setLoading(false);

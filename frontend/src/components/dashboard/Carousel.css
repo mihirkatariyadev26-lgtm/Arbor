@@ -172,7 +172,7 @@
   padding-left: 0.5rem;
   padding-bottom: 1rem;
   background-color: transparent;
-  border: 1.75px solid white;
+  border: 1.75px solid transparent;
   border-radius: 1rem;
   /* filter: brightness(5rem); */
 }
@@ -223,4 +223,8 @@
   cursor: pointer;
   background-color: forestgreen;
   box-shadow: 0px 0px 2vh forestgreen;
+}
+.hover:hover {
+  cursor: pointer;
+  transform: scale(1.1);
 }

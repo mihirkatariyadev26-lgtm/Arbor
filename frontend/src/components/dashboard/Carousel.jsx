@@ -3,10 +3,13 @@ import "./Carousel.css";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
 const Carousel = () => {
   const scrollRef = useRef(null);
   const [repoData, setRepodata] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
   const [staredRepos, setStaredRepos] = useState(() => {
     const saved = localStorage.getItem("starRepos");
     if (saved) {
@@ -120,7 +123,14 @@ const Carousel = () => {
                 <div className="Repo-detail">
                   <div className="top">
                     <p>Repository Name : {e.name}</p>
-                    <p>Published By : {e.owner.username}</p>
+                    <p
+                      onClick={() => {
+                        // console.log(userId);
+                        navigate(`/profile/${e.owner._id}`);
+                      }}
+                      style={{ cursor: "pointer" }}>
+                      Published By : {e.owner.username}
+                    </p>
                   </div>
 
                   <div className="repo-description">
@@ -139,7 +149,9 @@ const Carousel = () => {
                             alignItems: "center",
                             fontSize: "2rem",
                             marginRight: "1rem",
+                            transition: "all 0.2s ease",
                           }}
+                          className="hover"
                           onClick={() => handelStarRepo(e._id)}
                         />
                       ) : (
@@ -150,6 +162,7 @@ const Carousel = () => {
                             fontSize: "2rem",
                             marginRight: "1rem",
                           }}
+                          className="hover"
                           onClick={() => handelStarRepo(e._id)}
                         />
                       )}
