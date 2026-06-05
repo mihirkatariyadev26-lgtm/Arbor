@@ -3,6 +3,17 @@ import path from "path";
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { s3, S3_BUCKET } from "../config/aws-config.js";
 
+async function getFilesRecursively(dir) {
+  const entries = await fs.readdir(dir, { withFileTypes: true });
+  const files = await Promise.all(
+    entries.map(async (entry) => {
+      const res = path.resolve(dir, entry.name);
+      return entry.isDirectory() ? getFilesRecursively(res) : res;
+    }),
+  );
+  return files.flat();
+}
+
 export async function pushRepo() {
   const repoPath = path.resolve(process.cwd(), ".Arbor");
   const commitsPath = path.join(repoPath, "commits");
@@ -10,24 +21,26 @@ export async function pushRepo() {
   try {
     const commitDirs = await fs.readdir(commitsPath);
     for (const commitDir of commitDirs) {
-      const commitPath = path.join(commitsPath, commitDir); //this will use to create the folders which are present in the commit folder
-      //movig to the copying the files which are prensent in the each commite folder
-      const files = await fs.readdir(commitPath);
+      const currentCommitPath = path.join(commitsPath, commitDir);
+      const stat = await fs.stat(currentCommitPath);
+      if (!stat.isDirectory()) continue;
+
+      const files = await getFilesRecursively(currentCommitPath);
       for (const file of files) {
-        const filePath = path.join(commitPath, file); //getting the each file which is present in the folder
-        const fileContent = await fs.readFile(filePath); //reading the file content
+        const relativePath = path.relative(currentCommitPath, file);
+        const fileContent = await fs.readFile(file);
+        const s3Key = `commits/${commitDir}/${relativePath.replace(/\\/g, "/")}`;
 
         const params = {
-          Bucket: S3_BUCKET, //service name
-          Key: `commits/${commitDir}/${file}`, //how we want to save the files in which structure
-          Body: fileContent, //what will be the body
+          Bucket: S3_BUCKET,
+          Key: s3Key,
+          Body: fileContent,
         };
 
-        await s3.send(new PutObjectCommand(params)); //sending the files to the S3 bucket PutObjectCommand is used to send the files to the S3 bucket
+        await s3.send(new PutObjectCommand(params));
       }
     }
-    console.log("files are pushed to the S3");
   } catch (error) {
-    console.error("Error to push to S3:", error);
+    console.error(error);
   }
 }
