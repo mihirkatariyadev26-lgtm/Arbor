@@ -1,7 +1,7 @@
 {
-  "name": "arbor-cli",
+  "name": "backend",
   "version": "1.0.0",
-  "description": "A CLI tool for arbor",
+  "description": "",
   "license": "ISC",
   "author": "Mihir katariya",
   "type": "module",
@@ -13,10 +13,10 @@
   ],
   "main": "index.js",
   "bin": {
-    "arbor": "./index.js"
+    "arbor": "./cli.js"
   },
   "scripts": {
-    "start": "node index.js start"
+    "start": "node index.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",

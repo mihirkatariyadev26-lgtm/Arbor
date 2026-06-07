@@ -2,8 +2,6 @@ import mongoose from "mongoose";
 import { Repository } from "../models/repomodel.js";
 import { Issue } from "../models/issuemodel.js";
 import { User } from "../models/usermodel.js";
-import { ListObjectsV2Command, GetObjectCommand } from "@aws-sdk/client-s3";
-import { s3, S3_BUCKET } from "../config/aws-config.js";
 const createRepository = async (req, res) => {
   const { owner, name, description, content, visibility, issues } = req.body;
   try {
@@ -173,129 +171,6 @@ const starRepository = async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 };
-
-function buildNestedTree(flatPaths) {
-  const root = [];
-  for (const item of flatPaths) {
-    const parts = item.split("/");
-    let currentLevel = root;
-    let accumulatedPath = "";
-
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i];
-      accumulatedPath = accumulatedPath ? `${accumulatedPath}/${part}` : part;
-      const isFile = i === parts.length - 1;
-
-      let existingNode = currentLevel.find((node) => node.name === part);
-
-      if (!existingNode) {
-        existingNode = {
-          name: part,
-          type: isFile ? "file" : "folder",
-          path: accumulatedPath,
-          children: isFile ? null : [],
-        };
-        currentLevel.push(existingNode);
-      }
-
-      if (!isFile) {
-        currentLevel = existingNode.children;
-      }
-    }
-  }
-
-  const sortTreeNodes = (nodes) => {
-    if (!nodes) return;
-    nodes.sort((a, b) => {
-      if (a.type !== b.type) return a.type === "folder" ? -1 : 1;
-      return a.name.localeCompare(b.name);
-    });
-    nodes.forEach((node) => sortTreeNodes(node.children));
-  };
-
-  sortTreeNodes(root);
-  return root;
-}
-
-async function getRepositoryTree(req, res) {
-  // 1. Extract all three identifiers from the request URL
-  const { userId, repoId, commitId } = req.params;
-
-  if (!userId || !repoId || !commitId) {
-    return res.status(400).json({ error: "Missing required parameters." });
-  }
-
-  try {
-    // 2. Build the precise S3 prefix matching your push.js architecture
-    const targetPrefix = `users/${userId}/${repoId}/commits/${commitId}/`;
-
-    const command = new ListObjectsV2Command({
-      Bucket: S3_BUCKET,
-      Prefix: targetPrefix,
-    });
-
-    const data = await s3.send(command);
-
-    if (!data.Contents || data.Contents.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No files found for this commit." });
-    }
-
-    // 3. Strip out the long AWS user/repo prefix so the frontend just gets the file tree
-    const flatPaths = data.Contents.map((obj) =>
-      obj.Key.replace(targetPrefix, ""),
-    ).filter((path) => path.trim() !== "");
-
-    const structuredFolderTree = buildNestedTree(flatPaths);
-
-    return res.status(200).json({ tree: structuredFolderTree });
-  } catch (error) {
-    console.error("Error inside getRepositoryTree backend controller:", error);
-    return res
-      .status(500)
-      .json({ error: "Failed to generate repository file tree." });
-  }
-}
-const getFileContent = async (req, res) => {
-  // 1. Extract IDs from the URL params
-  const { userId, repoId, commitId } = req.params;
-
-  // 2. Extract the file path from the Query string (e.g., ?path=package.json)
-  const filePath = req.query.path;
-
-  if (!userId || !repoId || !commitId || !filePath) {
-    return res
-      .status(400)
-      .json({ error: "Missing required parameters or file path." });
-  }
-
-  try {
-    // 3. Construct the exact exact S3 key for this specific file
-    const targetKey = `users/${userId}/${repoId}/commits/${commitId}/${filePath}`;
-
-    const command = new GetObjectCommand({
-      Bucket: S3_BUCKET,
-      Key: targetKey,
-    });
-
-    const data = await s3.send(command);
-
-    // 4. AWS SDK v3 provides a handy method to convert the stream directly to a string
-    const fileContent = await data.Body.transformToString("utf-8");
-
-    // 5. Send the raw text content back to the frontend
-    return res.status(200).json({ content: fileContent });
-  } catch (error) {
-    // AWS throws a specific error name if the file doesn't exist
-    if (error.name === "NoSuchKey") {
-      return res.status(404).json({ error: "File not found in S3 storage." });
-    }
-
-    console.error("Error fetching file content from S3:", error);
-    return res.status(500).json({ error: "Failed to fetch file content." });
-  }
-};
 export const repositoryController = {
   createRepository,
   getAllRepository,
@@ -306,6 +181,4 @@ export const repositoryController = {
   toggleVisibilityByID,
   deleteRepositoryByID,
   starRepository,
-  getRepositoryTree,
-  getFileContent,
 };

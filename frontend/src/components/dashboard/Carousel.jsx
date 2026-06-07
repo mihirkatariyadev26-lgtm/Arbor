@@ -190,7 +190,13 @@ const Carousel = () => {
                       <p>Issues : {e.issues.length}</p>
                     </div>
                     <div className="button">
-                      <div className="Issue-Page">Explore Repository</div>
+                      <div
+                        className="Issue-Page"
+                        onClick={() => {
+                          navigate(`/repo/${e._id}`);
+                        }}>
+                        Explore Repository
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -2,12 +2,8 @@ import { S3Client } from "@aws-sdk/client-s3";
 import dotenv from "dotenv";
 import path from "path";
 
-import { fileURLToPath } from 'url';
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
 const region = process.env.AWS_REGION?.trim() || "ap-south-1";
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID?.trim();
 const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY?.trim();

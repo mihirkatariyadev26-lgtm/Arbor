@@ -15,14 +15,6 @@ reporouter.delete(
   "/repo/delete/:id",
   repositoryController.deleteRepositoryByID,
 );
-reporouter.get(
-  "/repo/tree/:userId/:repoId/:commitId",
-  repositoryController.getRepositoryTree,
-);
-reporouter.get(
-  "/repo/file/:userId/:repoId/:commitId",
-  repositoryController.getFileContent,
-);
 reporouter.get("/repo/:id", repositoryController.getRepositoryByID);
 reporouter.patch("/repo/toggle/:id", repositoryController.toggleVisibilityByID);
 reporouter.post("/repo/star", repositoryController.starRepository);

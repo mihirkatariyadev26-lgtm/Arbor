@@ -8,7 +8,7 @@ import Dashboard from "./components/dashboard/Dashboard.jsx";
 import Profile from "./components/user/Profile.jsx";
 import CreateRepo from "./components/repository/CreateRepo.jsx";
 import EditRepo from "./components/repository/EditRepo.jsx";
-
+import RepoPage from "./components/repository/RepoPage.jsx";
 const ProjectRoutes = () => {
   const { currentUser, setCurrentUser } = useAuth();
   const navigate = useNavigate();
@@ -42,6 +42,7 @@ const ProjectRoutes = () => {
     { path: "/profile", element: <Profile /> },
     { path: "/Edit/:id", element: <EditRepo /> },
     { path: "/profile/:id", element: <Profile /> },
+    { path: "/repo/:id", element: <RepoPage /> },
   ]);
   return element;
 };

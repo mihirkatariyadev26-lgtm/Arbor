@@ -1,145 +1,145 @@
 {
   "Message": "checking",
-  "date": "2026-06-05T21:17:37.890Z",
-  "parentCommit": null,
+  "date": "2026-06-05T21:19:01.962Z",
+  "parentCommit": "448000b1-0f14-43e7-a632-0df10ea15f30",
   "files": {
     ".gitignore": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "9b1affc8de04356f6c9076dcf5926a0aae66d24116afea2d59124b032e56083d",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "commit.json": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "ab9480e3c9c9f5b80d6c5a7a6727a22f6e17a04250a5bbe06b3bf7f28c8133f5",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "config\\aws-config.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "c7bc293f819c4e85bc478cc930a1125c4e998cc07158458f312211927ef4bdc6",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\add.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "a4abe9f4d40975b999b549f687ae02374f530af40c4c674f79f2c45bb7142dba",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\commit.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "46ebaa07a5e4117addd892e2a23c78886a2519cc55b9d2b58d1a660e05883592",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\init.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "72c93ba4e5445bc6855a23aa931b9adf718f9382b84804a31fd1bb80fdc9a987",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\issue.controller.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "d2cdf66acb274fbe46dce10561ea1eca5e1d2ed0c75436d0d7ab8cacba7ac893",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\link.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "9b7fad6d482f0dd34a4ad29c4d88388c25592715c17242b4a921513b812532ae",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\login.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "5797b30e552067a01df3a067f71d970bd2f091183bf9741995645d4aeaa145a7",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\pull.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "d84a585bd7fd74a26b1a062b4836c425b0f02697187f58a969ad3f305781d282",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\push.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "14191c68fc92e8d895b8e2ddcc20d94b25d76754ec31616eed84a839c4536052",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\repository.controller.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "92e8d0e435252e267caaba1a96489a318eb15aa251a22f4936b01e1a62e50047",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\revert.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "29998b64d73eb278b58afe6a992583a426e96ffa9fa06e2b2ad2619522ca5114",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "controllers\\user.controller.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "a53e31d8e2b2431ad3bf5996291de81cd37be1b607be91e14f58698734fa68e6",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "hello.txt": {
-      "type": "full",
-      "hash": "13dd7774cadfb09f8732ec2cc183916c9d0304dc6e7fa6640f6cefefae4cba12",
-      "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
+      "type": "vcdiff",
+      "hash": "ad37544ba6fc1b2f44a9d7bef66c6ec900f0686e9795daafe0bafe211e701a88",
+      "originalCommit": "c342dc6d-cc4e-4141-b5fa-4a472559f349"
     },
     "hello2.txt": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "73019d12bc6b549e5bdb946a8986d14d3c29fc67180ccfe052b606891a4bb43e",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "index.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "bbf1472ed3ba60563ececc969cb648d768206cebabfac91495d4c833d5ab3e13",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "middleware\\authmiddleware.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "middleware\\authorizemiddleware.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "models\\issuemodel.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "b9a234bf9aefcf8b276e058eaf1aca0beb3bff36a2051b08d1dce413027e5370",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "models\\repomodel.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "6df959358e0469c7780da0efc16909fcabcb2b993f76dae82b1b512adbe622cc",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "models\\usermodel.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "049178b836d188b418944d7dec7d5f42b46d666930451bebefabc7d067a6b14d",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "package-lock.json": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "9ef25d035063173a2a8f56883b1dea840021b810d1b8e90b104ed08491eb50d6",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "package.json": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "faeffa2d5a3a7a668a03fc211abb8fac35f01ba66db010e09f2c5e8b37736414",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "routes\\issue.router.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "3ffa0490ccdd37d3de3c04d5871f51147d71b82620f01a30c1b2b07454a30236",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "routes\\main.route.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "6692d5bfd274fe9520b72e5f72718807c525190d1e3a9d031f8c1cbdaa13835a",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "routes\\repository.route.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "f30197c5620c097873d25d6e83eee5b8f5ebd15983b622029b173582df2ed610",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     },
     "routes\\user.router.js": {
-      "type": "full",
+      "type": "unchanged",
       "hash": "9e12561f4a0bcabdb474d440344a24ab039527b76e372312df34e4dab8292e54",
       "originalCommit": "448000b1-0f14-43e7-a632-0df10ea15f30"
     }

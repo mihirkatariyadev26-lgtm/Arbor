@@ -1,14 +1,7 @@
-#!/usr/bin/env node
 import dns from "node:dns";
 dns.setDefaultResultOrder("ipv4first");
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, ".env") });
+import "dotenv/config";
 import cors from "cors";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
