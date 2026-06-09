@@ -30,7 +30,9 @@ const Carousel = () => {
     const fetchReposData = async () => {
       try {
         setLoading(true);
-        const res = await axios.get("http://localhost:3000/repo/all");
+        const res = await axios.get(
+          "https://arbor-backend-qr7t.onrender.com/repo/all",
+        );
         setRepodata(res.data);
       } catch (e) {
         console.log("Error to get All repository", e);
@@ -45,7 +47,7 @@ const Carousel = () => {
         const userId = localStorage.getItem("userId");
         if (!userId) return;
         const res = await axios.get(
-          `http://localhost:3000/getUserProfile/${userId}`,
+          `https://arbor-backend-qr7t.onrender.com/getUserProfile/${userId}`,
         );
         const user = res.data;
         if (user.starRepos && Array.isArray(user.starRepos)) {
@@ -66,10 +68,13 @@ const Carousel = () => {
   }, []);
   const handelStarRepo = async (id) => {
     try {
-      const res = await axios.post("http://localhost:3000/repo/star", {
-        repoId: id,
-        userId: localStorage.getItem("userId"),
-      });
+      const res = await axios.post(
+        "https://arbor-backend-qr7t.onrender.com/repo/star",
+        {
+          repoId: id,
+          userId: localStorage.getItem("userId"),
+        },
+      );
       const updatedUser = res.data;
       if (updatedUser.starRepos && Array.isArray(updatedUser.starRepos)) {
         localStorage.setItem(

@@ -17,7 +17,7 @@ const UserRepolist = () => {
           .replace(/['"]+/g, "");
         // console.log(cleanid);
         const res2 = await axios.get(
-          `http://localhost:3000/repo/user/${cleanid}`,
+          `https://arbor-backend-qr7t.onrender.com/repo/user/${cleanid}`,
         );
         // console.log("Length:", cleanid.length);
         // console.log("Encoded:", encodeURIComponent(cleanid));

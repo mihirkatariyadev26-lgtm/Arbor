@@ -19,11 +19,14 @@ function Signup() {
     if (loading) return;
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:3000/signup", {
-        username: userName,
-        password: password,
-        email: email,
-      });
+      const res = await axios.post(
+        "https://arbor-backend-qr7t.onrender.com/signup",
+        {
+          username: userName,
+          password: password,
+          email: email,
+        },
+      );
       const token = res.data.token;
       const userId = res.data.userId;
       localStorage.setItem("token", token);

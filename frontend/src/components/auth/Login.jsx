@@ -17,10 +17,13 @@ function Login() {
     if (loading) return;
     try {
       setLoading(true);
-      const res = await axios.post("http://localhost:3000/login", {
-        password: password,
-        email: email,
-      });
+      const res = await axios.post(
+        "https://arbor-backend-qr7t.onrender.com/login",
+        {
+          password: password,
+          email: email,
+        },
+      );
       const token = res.data.token;
       const userId = res.data.userId;
       const userName = res.data.userName;

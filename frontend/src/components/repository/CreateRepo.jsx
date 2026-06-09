@@ -25,14 +25,17 @@ function CreateRepo() {
         setIsSubmitting(true);
 
         //TODO:write the api call for create repo
-        const res = await axios.post("http://localhost:3000/repo/create", {
-          name: repoName,
-          description: description,
-          visibility: visibility,
-          owner: localStorage.getItem("userId"),
-          content: [content],
-          issues: [],
-        });
+        const res = await axios.post(
+          "https://arbor-backend-qr7t.onrender.com/repo/create",
+          {
+            name: repoName,
+            description: description,
+            visibility: visibility,
+            owner: localStorage.getItem("userId"),
+            content: [content],
+            issues: [],
+          },
+        );
         setValid(true);
         navigate("/dashboard");
       } else {

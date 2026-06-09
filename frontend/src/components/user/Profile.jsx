@@ -76,7 +76,7 @@ function Profile() {
         const userId = localStorage.getItem("userId");
         if (!userId) return;
         const res = await axios.get(
-          `http://localhost:3000/getUserProfile/${userId}`,
+          `https://arbor-backend-qr7t.onrender.com/getUserProfile/${userId}`,
         );
         const user = res.data;
         if (user.followedUsers && Array.isArray(user.followedUsers)) {
@@ -103,7 +103,9 @@ function Profile() {
       try {
         if (localStorage.getItem("userId")) {
           setLoading(true);
-          const res = await axios.get(`http://localhost:3000/repo/user/${id}`);
+          const res = await axios.get(
+            `https://arbor-backend-qr7t.onrender.com/repo/user/${id}`,
+          );
           setUserRepo(res.data);
           setLoading(false);
           console.log(res.data);
@@ -120,7 +122,7 @@ function Profile() {
       try {
         setLoading(true);
         const res = await axios.get(
-          `http://localhost:3000/getUserProfile/${id}`,
+          `https://arbor-backend-qr7t.onrender.com/getUserProfile/${id}`,
         );
         setUserDetail(res.data);
         setLoading(false);
@@ -136,7 +138,9 @@ function Profile() {
   }, [id]);
   const handleDelete = async (id) => {
     try {
-      const res = await axios.delete(`http://localhost:3000/repo/delete/${id}`);
+      const res = await axios.delete(
+        `https://arbor-backend-qr7t.onrender.com/repo/delete/${id}`,
+      );
       console.log(res);
       setUserRepo((prevRepos) => prevRepos.filter((repo) => repo._id !== id));
     } catch (e) {
@@ -147,10 +151,13 @@ function Profile() {
   //DEBUGING NEEDED
   const handleFollow = async (targetId) => {
     try {
-      const res = await axios.post("http://localhost:3000/user/follow", {
-        currentUser: localStorage.getItem("userId"),
-        followingUser: targetId || id,
-      });
+      const res = await axios.post(
+        "https://arbor-backend-qr7t.onrender.com/user/follow",
+        {
+          currentUser: localStorage.getItem("userId"),
+          followingUser: targetId || id,
+        },
+      );
       const updateUser = res.data;
       if (updateUser.followedUsers && Array.isArray(updateUser.followedUsers)) {
         localStorage.setItem(
@@ -169,7 +176,9 @@ function Profile() {
   };
   const toggleVisibility = async (id) => {
     try {
-      const res = await axios.patch(`http://localhost:3000/repo/toggle/${id}`);
+      const res = await axios.patch(
+        `https://arbor-backend-qr7t.onrender.com/repo/toggle/${id}`,
+      );
       console.log(res.data);
       setUserRepo((prevRepos) =>
         prevRepos.map((repo) =>

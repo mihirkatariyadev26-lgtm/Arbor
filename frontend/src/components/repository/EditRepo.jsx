@@ -17,7 +17,9 @@ function EditRepo() {
     const getData = async () => {
       if (!repoID) return;
       try {
-        const res = await axios.get(`http://localhost:3000/repo/${repoID}`);
+        const res = await axios.get(
+          `https://arbor-backend-qr7t.onrender.com/repo/${repoID}`,
+        );
         console.log(res.data);
         setDescription(res.data[0].description || "");
         setContent(res.data[0].content || "");
