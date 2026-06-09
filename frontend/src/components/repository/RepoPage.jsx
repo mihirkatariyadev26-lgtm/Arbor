@@ -15,13 +15,16 @@ function RepoPage() {
       );
       // The backend uses .find() which returns an array. We take the first element.
       const repo = result.data[0];
+
       if (repo && repo.commits && repo.commits.length > 0) {
         // The latest commit is the last object pushed to the commits array
         const latestCommitId =
           repo.commits[repo.commits.length - 1].latestCommit;
         setCommitId(latestCommitId);
         console.log("Fetched commitId:", latestCommitId);
-        setUserId(result.data.owner._id);
+
+        // FIX: Changed result.data.owner._id to repo.owner?._id
+        setUserId(repo.owner?._id);
       } else {
         setCommitId(null); // explicitly set to null when no commits are found
       }

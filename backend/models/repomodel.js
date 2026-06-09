@@ -28,6 +28,13 @@ const RepositorySchema = new Schema({
       ref: "Issue",
     },
   ],
+  commits: [
+    {
+      commitDate: Date.now(),
+      commitIdList: [String],
+      latestCommit: String,
+    },
+  ],
 });
 
 export const Repository = mongoose.model("Repository", RepositorySchema);

@@ -38,7 +38,13 @@ function IssueNav() {
         boxShadow: "0vh 0vh 1vh rgba(255, 255, 255, 0.511)",
       }}>
       {/* left section */}
-      <div className="name-repo">{repo.name}</div>
+      <div
+        className="name-repo"
+        onClick={() => {
+          navigate(`/repo/${repoId}`);
+        }}>
+        {repo.name}
+      </div>
       {/* right Part */}
       <div
         style={{
