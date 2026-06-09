@@ -11,7 +11,7 @@ function CreateIssue() {
   const navigate = useNavigate();
   const handleCreateIssue = async () => {
     const res = await axios.post(
-      `https://arbor-backend-qr7t.onrender.com//issue/create/${id}`,
+      `https://arbor-backend-qr7t.onrender.com/issue/create/${id}`,
       {
         title: title,
         description: description,

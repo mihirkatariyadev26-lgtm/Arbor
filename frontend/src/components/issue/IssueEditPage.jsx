@@ -12,7 +12,7 @@ function IssueEditPage() {
     const fetchIssue = async () => {
       try {
         const response = await axios.get(
-          `https://arbor-backend-qr7t.onrender.com//issue/${issueId}`,
+          `https://arbor-backend-qr7t.onrender.com/issue/${issueId}`,
         );
         setTitle(response.data.title);
         setDescription(response.data.description);
