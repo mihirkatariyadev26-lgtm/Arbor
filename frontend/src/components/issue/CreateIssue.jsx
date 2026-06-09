@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import Navbar from "../navbar";
+import Navbar from "../Navbar";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import { useNavigate, useParams } from "react-router-dom";

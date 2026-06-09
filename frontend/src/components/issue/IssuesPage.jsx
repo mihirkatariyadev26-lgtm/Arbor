@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
-import Navbar from "../navbar";
+import Navbar from "../Navbar";
 import PublicIcon from "@mui/icons-material/Public";
 import BorderColorOutlinedIcon from "@mui/icons-material/BorderColorOutlined";
 import BugReportOutlinedIcon from "@mui/icons-material/BugReportOutlined";

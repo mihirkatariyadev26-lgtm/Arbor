@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../navbar";
+import Navbar from "../Navbar";
 import IssueNav from "./IssueNav";
 // ==========================================
 // 1. RECURSIVE FILE NODE COMPONENT
