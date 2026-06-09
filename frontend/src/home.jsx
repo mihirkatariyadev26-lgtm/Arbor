@@ -1,7 +1,7 @@
 import React from "react";
 import "./home.css";
 import DotGrid from "./components/hero";
-import Navbar from "./components/navbar";
+import Navbar from "./components/Navbar";
 function Home() {
   return (
     <>

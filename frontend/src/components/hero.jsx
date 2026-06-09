@@ -3,7 +3,7 @@ import { gsap } from "gsap";
 import { InertiaPlugin } from "gsap/InertiaPlugin";
 
 import "./DotGrid.css";
-import Navbar from "./navbar";
+import Navbar from "./Navbar";
 gsap.registerPlugin(InertiaPlugin);
 
 const throttle = (func, limit) => {

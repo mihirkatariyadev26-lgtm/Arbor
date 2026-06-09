@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../navbar";
+import Navbar from "../Navbar";
 import "./Login.css";
 import { useAuth } from "../../authContext";
 import Box from "@mui/material/Box";
