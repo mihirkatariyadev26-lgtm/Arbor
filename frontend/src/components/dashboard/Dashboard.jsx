@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../Navbar";
+import Navbar from "../navbar";
 import "./dashboard.css";
 import DataSaverOnOutlinedIcon from "@mui/icons-material/DataSaverOnOutlined";
 import PriorityHighRoundedIcon from "@mui/icons-material/PriorityHighRounded";
@@ -191,9 +191,6 @@ function Dashboard() {
                 <DataSaverOnOutlinedIcon />
                 <p>New Repository</p>
               </div>
-              {/* <div className="Option">
-                  <PriorityHighRoundedIcon />
-                </div> */}
             </div>
           </div>
         </div>

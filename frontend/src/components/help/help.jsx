@@ -10,27 +10,42 @@ function Help() {
       }}>
       <p className="header">Guide to use Application</p>
       <li className="step">
-        index.js init <br />
+        arbor init <br />
         Usage: Initalise a new repository
       </li>
       <li className="step">
-        index.js add {"<file>"} <br />
-        Usage: Add file to repository
+        arbor login <br />
+        Usage: Login to remote Account
       </li>
       <li className="step">
-        index.js commit {"<Message>"} <br />
+        arbor link {"<URL>"} <br />
+        Usage: Link Remote Repository to local Repository
+      </li>
+
+      <li className="step">
+        arbor add {"<file>"} <br />
+        Usage: Add {"<file>"} to repository <br />
+        or
+      </li>
+      <li className="step">
+        arbor add . <br />
+        Usage: Add all changes{`(files)`} to repository <br />
+        or
+      </li>
+      <li className="step">
+        arbor commit {"<Message>"} <br />
         Usage: Commit to the repository
       </li>
       <li className="step">
-        index.js revert {"<commitId>"} <br />
+        arbor revert {"<commitId>"} <br />
         Usage: Revert to the old changes
       </li>
       <li className="step">
-        index.js push <br />
+        arbor push <br />
         Usage: Push to the repository
       </li>
       <li className="step">
-        index.js pull <br />
+        arbor pull <br />
         Usage: Pull the repository
       </li>
     </ul>
