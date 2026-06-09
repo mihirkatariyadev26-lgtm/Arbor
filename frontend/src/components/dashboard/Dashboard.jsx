@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Navbar from "../navbar";
+import Navbar from "../Navbar";
 import "./dashboard.css";
 import DataSaverOnOutlinedIcon from "@mui/icons-material/DataSaverOnOutlined";
 import PriorityHighRoundedIcon from "@mui/icons-material/PriorityHighRounded";
