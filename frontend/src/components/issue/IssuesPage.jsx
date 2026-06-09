@@ -21,7 +21,7 @@ function IssuesPage() {
     const fetchRepoOwner = async () => {
       try {
         const request = await axios.get(
-          `https://arbor-backend-qr7t.onrender.com//repo/${id}`,
+          `https://arbor-backend-qr7t.onrender.com/repo/${id}`,
         );
         setRepoOwner(request.data[0].owner._id);
       } catch (e) {
@@ -31,7 +31,7 @@ function IssuesPage() {
     const fetchIssues = async () => {
       try {
         const res = await axios.get(
-          `https://arbor-backend-qr7t.onrender.com//issue/repo/${id}`,
+          `https://arbor-backend-qr7t.onrender.com/issue/repo/${id}`,
         );
         setData(res.data);
       } catch (e) {
@@ -45,7 +45,7 @@ function IssuesPage() {
   const handleDelete = async (issueId) => {
     try {
       const response = await axios.delete(
-        `https://arbor-backend-qr7t.onrender.com//issue/delete/${issueId}`,
+        `https://arbor-backend-qr7t.onrender.com/issue/delete/${issueId}`,
       );
       setData(response.data);
     } catch (e) {

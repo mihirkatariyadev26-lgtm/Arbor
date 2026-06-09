@@ -18,7 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#1d1a1acb",
   ...theme.typography.body2,
   padding: theme.spacing(1),
-  textAlign: "center",
+  textAlign: "left",
   color: (theme.vars ?? theme).palette.text.secondary,
   ...theme.applyStyles("dark", {
     backgroundColor: "transparent",
@@ -65,7 +65,7 @@ const CardCarousel = styled("div")(({ theme }) => ({
   position: "relative",
   width: "100%",
   minHeight: "100%",
-  height: "auto",
+  height: "80%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -83,7 +83,7 @@ const CardCarousel = styled("div")(({ theme }) => ({
 const CardContainer = styled("div")({
   position: "relative",
   width: "100%",
-  height: "100%",
+  height: "80%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -92,7 +92,7 @@ const CardContainer = styled("div")({
 
 const CardWrapper = styled("div")(({ theme }) => ({
   width: "100%",
-  height: "100%",
+  height: "80%",
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
