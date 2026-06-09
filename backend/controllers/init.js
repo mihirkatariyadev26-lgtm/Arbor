@@ -13,7 +13,7 @@ export async function initRepo() {
     await fs.mkdir(commitPath, { recursive: true });
     await fs.writeFile(
       path.join(repoPath, "config.json"),
-      JSON.stringify({ buket: process.env.S3_BUKET }),
+      JSON.stringify({}, null, 2),
     );
     await fs.writeFile(path.join(repoPath, "HEAD"), "");
 

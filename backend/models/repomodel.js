@@ -30,7 +30,7 @@ const RepositorySchema = new Schema({
   ],
   commits: [
     {
-      commitDate: Date.now(),
+      commitDate: { type: Date, default: Date.now },
       commitIdList: [String],
       latestCommit: String,
     },

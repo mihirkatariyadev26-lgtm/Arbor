@@ -3,7 +3,7 @@ import { Repository } from "../models/repomodel.js";
 import { Issue } from "../models/issuemodel.js";
 import { User } from "../models/usermodel.js";
 import { ListObjectsV2Command, GetObjectCommand } from "@aws-sdk/client-s3";
-import { s3, S3_BUCKET } from "../config/aws-config.js";
+import { s3, getS3Bucket } from "../config/aws-config.js";
 const createRepository = async (req, res) => {
   const { owner, name, description, content, visibility, issues } = req.body;
   try {
@@ -230,7 +230,7 @@ async function getRepositoryTree(req, res) {
     const targetPrefix = `users/${userId}/${repoId}/commits/${commitId}/`;
 
     const command = new ListObjectsV2Command({
-      Bucket: S3_BUCKET,
+      Bucket: getS3Bucket(),
       Prefix: targetPrefix,
     });
 
@@ -275,7 +275,7 @@ const getFileContent = async (req, res) => {
     const targetKey = `users/${userId}/${repoId}/commits/${commitId}/${filePath}`;
 
     const command = new GetObjectCommand({
-      Bucket: S3_BUCKET,
+      Bucket: getS3Bucket(),
       Key: targetKey,
     });
 

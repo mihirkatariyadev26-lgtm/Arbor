@@ -1,26 +1,46 @@
 {
   "name": "arbor-cli",
-  "version": "1.0.0",
-  "description": "A CLI tool for arbor",
+  "version": "1.1.0",
+  "description": "CLI for Arbor — version control with init, commit, push, pull, and login against the Arbor backend",
   "license": "ISC",
-  "author": "Mihir katariya",
+  "author": "Mihir Katariya <mihirkatariyadev26@gmail.com>",
   "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
   "files": [
+    "bin",
     "controllers",
-    "binaries",
     "config",
-    "index.js"
+    "middleware",
+    "models",
+    "routes",
+    "index.js",
+    "README.md"
   ],
   "main": "index.js",
   "bin": {
-    "arbor": "./index.js"
+    "arbor": "bin/arbor.js"
+  },
+  "keywords": [
+    "arbor",
+    "cli",
+    "git",
+    "version-control",
+    "repository"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mihirkatariya/GIthub.git",
+    "directory": "backend"
   },
   "scripts": {
-    "start": "node index.js start"
+    "start": "node index.js start",
+    "prepublishOnly": "node --check index.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",
-    "aws-sdk": "^2.1693.0",
+    "@aws-sdk/s3-request-presigner": "^3.1004.0",
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",

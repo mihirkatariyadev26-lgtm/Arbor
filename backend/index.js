@@ -2,16 +2,9 @@
 import dns from "node:dns";
 dns.setDefaultResultOrder("ipv4first");
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
-import dotenv from "dotenv";
-import { fileURLToPath } from "url";
-import path from "path";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.resolve(__dirname, ".env") });
+import "./config/load-env.js";
 import cors from "cors";
 import mongoose from "mongoose";
-import bodyParser from "body-parser";
 import http from "http";
 import express from "express";
 import { Server } from "socket.io";
@@ -23,8 +16,7 @@ import { pullRepo } from "./controllers/pull.js";
 import { commitRepo } from "./controllers/commit.js";
 import { pushRepo } from "./controllers/push.js";
 import { revertRepo } from "./controllers/revert.js";
-import { login } from "./controllers/login.js"; // 1. Imported your new login controller
-import { mainRouter } from "./routes/main.route.js";
+import { login } from "./controllers/login.js";
 import { linkRepo } from "./controllers/link.js";
 yargs(hideBin(process.argv))
   .command("start", "start the server", {}, startServer)
@@ -91,10 +83,10 @@ yargs(hideBin(process.argv))
   .help().argv; //args:command,description,commands parame1ters,config method/function
 
 async function startServer() {
+  const { mainRouter } = await import("./routes/main.route.js");
   const app = express();
   const port = process.env.PORT || 3000;
 
-  app.use(bodyParser.json());
   app.use(express.json());
   const mongoUrl = process.env.MONGODB_URL;
   mongoose

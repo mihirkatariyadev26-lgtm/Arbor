@@ -2,6 +2,7 @@ import readline from "readline/promises";
 import { stdin as input, stdout as output } from "process";
 import path from "path";
 import fs from "fs/promises";
+import { getApiUrl } from "../config/constants.js";
 
 export async function login() {
   const rl = readline.createInterface({ input, output });
@@ -13,7 +14,7 @@ export async function login() {
     rl.close();
 
     // 2. Authenticate against your local backend
-    const response = await fetch("http://localhost:3000/login", {
+    const response = await fetch(`${getApiUrl()}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -30,9 +31,14 @@ export async function login() {
       return;
     }
 
-    const { userId } = data;
+    const { userId, token } = data;
     if (!userId) {
       console.error("❌ Login failed: Backend did not return a userId.");
+      return;
+    }
+
+    if (!token) {
+      console.error("❌ Login failed: Backend did not return a session token.");
       return;
     }
 
@@ -52,8 +58,9 @@ export async function login() {
       // File doesn't exist yet, which is fine; we will build a new one
     }
 
-    // Merge the new userId into the file
+    // Merge the new session into the file
     configData.userId = userId;
+    configData.token = token;
 
     // Write the updated object back to .Arbor/config.json
     await fs.writeFile(configPath, JSON.stringify(configData, null, 2));

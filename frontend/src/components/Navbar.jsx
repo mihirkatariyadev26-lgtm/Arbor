@@ -2,7 +2,6 @@ import React from "react";
 import "./navbar.css";
 import { useNavigate, useLocation } from "react-router-dom";
 
-import DotGrid from "./hero.jsx";
 import { useState, useEffect } from "react";
 function Navbar() {
   const navigate = useNavigate();

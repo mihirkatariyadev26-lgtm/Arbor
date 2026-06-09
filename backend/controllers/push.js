@@ -1,8 +1,12 @@
 import fs from "fs/promises";
 import path from "path";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
-import { s3, S3_BUCKET } from "../config/aws-config.js";
-import { configDotenv } from "dotenv";
+import {
+  apiHeaders,
+  getApiUrl,
+  requireLinkedConfig,
+} from "../config/arbor-config.js";
+
+const UPLOAD_BATCH_SIZE = 100;
 
 async function getFilesRecursively(dir) {
   const entries = await fs.readdir(dir, { withFileTypes: true });
@@ -15,46 +19,39 @@ async function getFilesRecursively(dir) {
   return files.flat();
 }
 
+async function requestUploadUrls(config, files) {
+  const { userId, repoId } = config;
+  const response = await fetch(
+    `${getApiUrl()}/repo/sync/push/${userId}/${repoId}`,
+    {
+      method: "POST",
+      headers: apiHeaders(config, { "Content-Type": "application/json" }),
+      body: JSON.stringify({ files }),
+    },
+  );
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || "Failed to prepare upload.");
+  }
+
+  return data.uploads;
+}
+
 export async function pushRepo() {
   const repoPath = path.resolve(process.cwd(), ".Arbor");
   const commitsPath = path.join(repoPath, "commits");
-  const configPath = path.join(repoPath, "config.json");
 
   try {
-    // 1. Read the local .Arbor/config.json file for both userId and repoId
-    let config;
-    try {
-      const configContent = await fs.readFile(configPath, "utf-8");
-      config = JSON.parse(configContent);
-    } catch (err) {
-      console.error(
-        "❌ Error: config.json not found. Please run the login and link commands first.",
-      );
-      return;
-    }
+    const config = await requireLinkedConfig();
+    if (!config) return;
 
     const { userId, repoId } = config;
-
-    // 2. Validate that the user is logged in
-    if (!userId) {
-      console.error(
-        "❌ Error: userId not found. Please run 'node index.js login' first.",
-      );
-      return;
-    }
-
-    // 3. Validate that the repo is linked
-    if (!repoId) {
-      console.error(
-        "❌ Error: repoId not found. Please run 'node index.js link <URL>' first.",
-      );
-      return;
-    }
-
     console.log(`Pushing commits for User: ${userId}, Repo: ${repoId}...`);
 
-    // 4. Scan commits directory and upload files
     const commitDirs = await fs.readdir(commitsPath);
+    const pendingUploads = [];
+
     for (const commitDir of commitDirs) {
       const currentCommitPath = path.join(commitsPath, commitDir);
       const stat = await fs.stat(currentCommitPath);
@@ -63,21 +60,51 @@ export async function pushRepo() {
       const files = await getFilesRecursively(currentCommitPath);
       for (const file of files) {
         const relativePath = path.relative(currentCommitPath, file);
-        const fileContent = await fs.readFile(file);
-
-        // Dynamic S3 key structural formatting targeting your exact blueprint requirements
-        const s3Key = `users/${userId}/${repoId}/commits/${commitDir}/${relativePath.replace(/\\/g, "/")}`;
-
-        const params = {
-          Bucket: S3_BUCKET,
-          Key: s3Key,
-          Body: fileContent,
-        };
-
-        await s3.send(new PutObjectCommand(params));
+        pendingUploads.push({
+          commitId: commitDir,
+          path: relativePath.replace(/\\/g, "/"),
+          localPath: file,
+        });
       }
     }
-    console.log("🚀 Push successfully completed to AWS S3!");
+
+    if (pendingUploads.length === 0) {
+      console.log("No commits to push.");
+      return;
+    }
+
+    for (let i = 0; i < pendingUploads.length; i += UPLOAD_BATCH_SIZE) {
+      const batch = pendingUploads.slice(i, i + UPLOAD_BATCH_SIZE);
+      const uploads = await requestUploadUrls(
+        config,
+        batch.map(({ commitId, path: filePath }) => ({
+          commitId,
+          path: filePath,
+        })),
+      );
+
+      await Promise.all(
+        uploads.map(async (upload) => {
+          const local = batch.find(
+            (item) =>
+              item.commitId === upload.commitId && item.path === upload.path,
+          );
+          if (!local) return;
+
+          const body = await fs.readFile(local.localPath);
+          const response = await fetch(upload.url, {
+            method: "PUT",
+            body,
+          });
+
+          if (!response.ok) {
+            throw new Error(`Upload failed for ${upload.path}`);
+          }
+        }),
+      );
+    }
+
+    console.log("🚀 Push successfully completed!");
   } catch (error) {
     console.error("❌ An error occurred during push execution:", error.message);
   }

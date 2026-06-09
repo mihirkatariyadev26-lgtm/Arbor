@@ -176,9 +176,7 @@ function Dashboard() {
                 <Stack
                   direction="row"
                   spacing={2}
-                  style={{ backgroundColor: "transparent" }}>
-                  <Avatar {...stringAvatar(localStorage.getItem("userName"))} />
-                </Stack>
+                  style={{ backgroundColor: "transparent" }}></Stack>
               </div>
               <div className="username">{localStorage.getItem("userName")}</div>
             </div>

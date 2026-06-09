@@ -1,22 +1,26 @@
 import { S3Client } from "@aws-sdk/client-s3";
-import dotenv from "dotenv";
-import path from "path";
+import "./load-env.js";
 
-import { fileURLToPath } from 'url';
+function env(name) {
+  return process.env[name]?.trim() || undefined;
+}
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+export function getS3Bucket() {
+  return env("S3_BUCKET");
+}
 
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
-const region = process.env.AWS_REGION?.trim() || "ap-south-1";
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID?.trim();
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY?.trim();
-export const S3_BUCKET = process.env.S3_BUCKET?.trim();
+export function getAwsRegion() {
+  return env("AWS_REGION") || "ap-south-1";
+}
+
+export function getAwsCredentials() {
+  return {
+    accessKeyId: env("AWS_ACCESS_KEY_ID"),
+    secretAccessKey: env("AWS_SECRET_ACCESS_KEY"),
+  };
+}
 
 export const s3 = new S3Client({
-  region: region,
-  credentials: {
-    accessKeyId: accessKeyId,
-    secretAccessKey: secretAccessKey,
-  },
+  region: getAwsRegion(),
+  credentials: getAwsCredentials(),
 });

@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "../config/load-env.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { User } from "../models/usermodel.js";
@@ -22,12 +22,13 @@ const signup = async (req, res) => {
       followedUsers: [],
       starRepos: [],
     });
+    newUser.owner = newUser._id;
 
     const result = await newUser.save();
     const token = jwt.sign({ id: result._id }, process.env.JWT_SECREAT_KEY, {
       expiresIn: "1hr",
     });
-    res.json({ token, userId: result.insertid, userName: result.username });
+    res.json({ token, userId: result._id, userName: result.username });
   } catch (e) {
     console.error("Error during signup", e.message);
     res.status(500).send({ message: "server error" });
