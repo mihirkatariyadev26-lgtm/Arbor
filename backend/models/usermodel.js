@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-
+import User from "./usermodel";
 const UserScheama = new Schema({
   username: {
     type: String,
@@ -35,6 +35,11 @@ const UserScheama = new Schema({
       ref: "Repository",
     },
   ],
+  owner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 export const User = mongoose.model("User", UserScheama);

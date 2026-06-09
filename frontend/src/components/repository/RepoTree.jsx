@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import Navbar from "../Navbar";
-
+import Navbar from "../navbar";
+import IssueNav from "./IssueNav";
 // ==========================================
 // 1. RECURSIVE FILE NODE COMPONENT
 // ==========================================
@@ -91,7 +91,7 @@ const FileSidebar = ({ treeData, onSelectFile, isLoading }) => {
     <div
       style={{
         width: "20%",
-        height: "80vh",
+        height: "70vh",
         backgroundColor: "transparent",
         borderRight: "1px solid #30363d",
         overflowY: "auto",
@@ -143,13 +143,19 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
 
   // Fetch the folder structure on initial load
   useEffect(() => {
-    if (!userId || !repoId || !commitId) return;
+    if (!userId || !repoId || commitId === undefined) return;
+
+    if (commitId === null) {
+      setIsTreeLoading(false);
+      setTreeData([]);
+      return;
+    }
 
     const fetchTree = async () => {
       setIsTreeLoading(true);
       try {
         const response = await fetch(
-          `http://localhost:3000/repo/tree/${userId}/${repoId}/${commitId}`,
+          `https://arbor-backend-qr7t.onrender.com/repo/tree/${userId}/${repoId}/${commitId}`,
         );
         if (!response.ok) throw new Error("Failed to fetch tree");
 
@@ -174,7 +180,7 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
 
     try {
       // Must use encodeURIComponent to safely pass slashes (e.g., "src/app.js") in the query string
-      const url = `http://localhost:3000/repo/file/${userId}/${repoId}/${commitId}?path=${encodeURIComponent(filePath)}`;
+      const url = `https://arbor-backend-qr7t.onrender.com/repo/file/${userId}/${repoId}/${commitId}?path=${encodeURIComponent(filePath)}`;
 
       const response = await fetch(url);
       const data = await response.json();
@@ -202,11 +208,12 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
           overflow: "hidden", // Changed to hidden so the whole page doesn't scroll
         }}>
         <Navbar />
+        <IssueNav repoId={repoId} />
         <div
           style={{
             boxShadow: "0 0 2vh rgba(18, 18, 184, 0.511) ",
             display: "flex",
-            height: "78vh",
+            height: "70vh",
             backgroundColor: "transparent",
             color: "#c9d1d9",
             width: "95%",
@@ -261,7 +268,7 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
                     overflow: "auto", // Allows scrolling inside the code block only
                     padding: "16px",
                     scrollbarWidth: "thin",
-                    boxShadow: "0 0 2vh rgba(18, 18, 184, 0.511)",
+                    boxShadow: "0 0 1vh rgba(255, 255, 255, 0.123)",
                     scrollbarWidth: "none",
                   }}>
                   {isFileLoading ? (
