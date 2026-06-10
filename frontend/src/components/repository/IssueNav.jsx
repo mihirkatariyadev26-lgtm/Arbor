@@ -1,6 +1,7 @@
 import axios from "axios";
 import { React, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { API_BASE, NO_CACHE_HEADERS } from "../../config/api";
 import "./IssueNav.css";
 import ListIcon from "@mui/icons-material/List";
 import DataSaverOnOutlinedIcon from "@mui/icons-material/DataSaverOnOutlined";
@@ -12,17 +13,19 @@ function IssueNav() {
   useEffect(() => {
     const repoData = async () => {
       try {
-        const response = await axios.get(
-          `https://arbor-backend-qr7t.onrender.com/repo/${repoId}`,
-        );
-        setCount(response.data[0].issues.length);
-        setRepo(response.data[0]);
+        const response = await axios.get(`${API_BASE}/repo/${repoId}`, {
+          headers: NO_CACHE_HEADERS,
+        });
+        const repo = Array.isArray(response.data) ? response.data[0] : null;
+        if (!repo) return;
+        setCount(repo.issues?.length || 0);
+        setRepo(repo);
       } catch (e) {
         console.log("Error while fetching data", e);
       }
     };
-    repoData();
-  }, []);
+    if (repoId) repoData();
+  }, [repoId]);
   return (
     <div
       style={{

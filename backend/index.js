@@ -87,6 +87,7 @@ async function startServer() {
   const app = express();
   const port = process.env.PORT || 3000;
 
+  app.set("etag", false);
   app.use(express.json());
   const mongoUrl = process.env.MONGODB_URL;
   mongoose

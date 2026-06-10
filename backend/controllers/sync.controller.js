@@ -5,6 +5,7 @@ import {
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { s3, getS3Bucket } from "../config/aws-config.js";
+import { Repository } from "../models/repomodel.js";
 
 const PRESIGN_TTL_SECONDS = 3600;
 
@@ -42,10 +43,43 @@ async function getPushUploadUrls(req, res) {
       }),
     );
 
+    await syncCommitMetadataToDb(repoId, files);
+
     return res.status(200).json({ uploads });
   } catch (error) {
     console.error("getPushUploadUrls:", error.message);
     return res.status(500).json({ error: "Failed to prepare upload URLs." });
+  }
+}
+
+async function syncCommitMetadataToDb(repoId, files) {
+  const commitIds = [...new Set(files.map((f) => f.commitId).filter(Boolean))];
+  if (commitIds.length === 0) return;
+
+  try {
+    const repo = await Repository.findById(repoId);
+    if (!repo) return;
+
+    const knownCommits = new Set(
+      repo.commits.flatMap((entry) => [
+        entry.latestCommit,
+        ...(entry.commitIdList || []),
+      ]),
+    );
+
+    for (const commitId of commitIds) {
+      if (knownCommits.has(commitId)) continue;
+      repo.commits.push({
+        commitDate: new Date(),
+        commitIdList: [commitId],
+        latestCommit: commitId,
+      });
+      knownCommits.add(commitId);
+    }
+
+    await repo.save();
+  } catch (error) {
+    console.error("syncCommitMetadataToDb:", error.message);
   }
 }
 

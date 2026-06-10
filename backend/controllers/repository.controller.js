@@ -52,6 +52,7 @@ const getRepositoryByID = async (req, res) => {
   const repoId = req.params.id;
 
   try {
+    res.set("Cache-Control", "no-store");
     const repository = await Repository.find({ _id: repoId })
       .populate("owner")
       .populate("issues");
@@ -217,6 +218,69 @@ function buildNestedTree(flatPaths) {
   return root;
 }
 
+async function getLatestCommitFromRemote(req, res) {
+  const { userId, repoId } = req.params;
+
+  if (!userId || !repoId) {
+    return res.status(400).json({ error: "Missing required parameters." });
+  }
+
+  const prefix = `users/${userId}/${repoId}/commits/`;
+
+  try {
+    res.set("Cache-Control", "no-store");
+    const command = new ListObjectsV2Command({
+      Bucket: getS3Bucket(),
+      Prefix: prefix,
+    });
+    const data = await s3.send(command);
+    const objects = data.Contents || [];
+
+    if (objects.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No commits found on remote storage." });
+    }
+
+    const commitTimes = new Map();
+    for (const obj of objects) {
+      if (!obj.Key) continue;
+      const relative = obj.Key.slice(prefix.length);
+      const slashIndex = relative.indexOf("/");
+      if (slashIndex === -1) continue;
+
+      const commitId = relative.slice(0, slashIndex);
+      const lastModified = obj.LastModified || new Date(0);
+      const previous = commitTimes.get(commitId);
+      if (!previous || lastModified > previous) {
+        commitTimes.set(commitId, lastModified);
+      }
+    }
+
+    if (commitTimes.size === 0) {
+      return res
+        .status(404)
+        .json({ message: "No commits found on remote storage." });
+    }
+
+    let latestCommit = null;
+    let latestTime = null;
+    for (const [commitId, modifiedAt] of commitTimes) {
+      if (!latestTime || modifiedAt > latestTime) {
+        latestTime = modifiedAt;
+        latestCommit = commitId;
+      }
+    }
+
+    return res.status(200).json({ latestCommit });
+  } catch (error) {
+    console.error("getLatestCommitFromRemote:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to resolve latest commit from storage." });
+  }
+}
+
 async function getRepositoryTree(req, res) {
   // 1. Extract all three identifiers from the request URL
   const { userId, repoId, commitId } = req.params;
@@ -306,6 +370,7 @@ export const repositoryController = {
   toggleVisibilityByID,
   deleteRepositoryByID,
   starRepository,
+  getLatestCommitFromRemote,
   getRepositoryTree,
   getFileContent,
 };

@@ -23,6 +23,10 @@ reporouter.get(
   "/repo/file/:userId/:repoId/:commitId",
   repositoryController.getFileContent,
 );
+reporouter.get(
+  "/repo/commits/latest/:userId/:repoId",
+  repositoryController.getLatestCommitFromRemote,
+);
 reporouter.get("/repo/:id", repositoryController.getRepositoryByID);
 reporouter.patch("/repo/toggle/:id", repositoryController.toggleVisibilityByID);
 reporouter.post("/repo/star", repositoryController.starRepository);

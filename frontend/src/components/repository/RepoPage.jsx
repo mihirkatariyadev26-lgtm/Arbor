@@ -2,6 +2,26 @@ import { useParams } from "react-router-dom";
 import RepositoryViewer from "./RepoTree";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_BASE, NO_CACHE_HEADERS } from "../../config/api";
+
+async function resolveLatestCommitId(repo) {
+  if (repo?.commits?.length > 0) {
+    return repo.commits[repo.commits.length - 1].latestCommit;
+  }
+
+  const ownerId = repo?.owner?._id;
+  if (!ownerId || !repo?._id) return null;
+
+  try {
+    const { data } = await axios.get(
+      `${API_BASE}/repo/commits/latest/${ownerId}/${repo._id}`,
+      { headers: NO_CACHE_HEADERS },
+    );
+    return data.latestCommit || null;
+  } catch {
+    return null;
+  }
+}
 
 function RepoPage() {
   const { id: repoId } = useParams();
@@ -10,24 +30,19 @@ function RepoPage() {
 
   const fetchCommitId = async (id) => {
     try {
-      const result = await axios.get(
-        `https://arbor-backend-qr7t.onrender.com/repo/${id}`,
-      );
-      // The backend uses .find() which returns an array. We take the first element.
-      const repo = result.data[0];
+      const result = await axios.get(`${API_BASE}/repo/${id}`, {
+        headers: NO_CACHE_HEADERS,
+      });
 
-      if (repo && repo.commits && repo.commits.length > 0) {
-        // The latest commit is the last object pushed to the commits array
-        const latestCommitId =
-          repo.commits[repo.commits.length - 1].latestCommit;
-        setCommitId(latestCommitId);
-        console.log("Fetched commitId:", latestCommitId);
-
-        // FIX: Changed result.data.owner._id to repo.owner?._id
-        setUserId(repo.owner?._id);
-      } else {
-        setCommitId(null); // explicitly set to null when no commits are found
+      const repo = Array.isArray(result.data) ? result.data[0] : null;
+      if (!repo) {
+        setCommitId(null);
+        return;
       }
+
+      setUserId(repo.owner?._id);
+      const latestCommitId = await resolveLatestCommitId(repo);
+      setCommitId(latestCommitId);
     } catch (e) {
       console.log("error while getting CommitId", e);
       setCommitId(null);
