@@ -8,8 +8,10 @@ import DataSaverOnOutlinedIcon from "@mui/icons-material/DataSaverOnOutlined";
 function IssueNav() {
   const [repo, setRepo] = useState({});
   const [count, setCount] = useState(0);
+  const [owner, setOwner] = useState(undefined);
   const navigate = useNavigate();
   const { id: repoId } = useParams();
+  const [isClicked, setIsClicked] = useState(false);
   useEffect(() => {
     const repoData = async () => {
       try {
@@ -18,6 +20,7 @@ function IssueNav() {
         });
         const repo = Array.isArray(response.data) ? response.data[0] : null;
         if (!repo) return;
+        setOwner(repo.owner._id);
         setCount(repo.issues?.length || 0);
         setRepo(repo);
       } catch (e) {
@@ -26,6 +29,14 @@ function IssueNav() {
     };
     if (repoId) repoData();
   }, [repoId]);
+  const linkCopy = () => {
+    setIsClicked(true);
+    navigator.clipboard.writeText(window.location.href);
+    console.log("copied");
+    setTimeout(() => {
+      setIsClicked(false);
+    }, 2000);
+  };
   return (
     <div
       style={{
@@ -58,6 +69,35 @@ function IssueNav() {
           marginRight: "1.05rem",
           backgroundColor: "transparent",
         }}>
+        {isClicked ? <p style={{ fontSize: "1.25rem" }}>Copied!!</p> : ""}
+        {owner === localStorage.getItem("userId") ? (
+          <div
+            id="link"
+            style={{
+              border: "1px solid rgba(255, 255, 255, 0.21)",
+              paddingBlock: "1rem",
+              paddingInline: "1.5rem",
+              borderRadius: "2rem",
+              backgroundColor: "transparent",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor =
+                "rgba(255, 255, 255, 0.21)";
+              e.currentTarget.style.cursor = "pointer";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = "transparent";
+              e.currentTarget.cursor = "arrow";
+            }}
+            onClick={() => {
+              linkCopy();
+            }}>
+            Link : {window.location.href}
+          </div>
+        ) : (
+          ""
+        )}
+
         <div
           style={{
             alignContent: "center",

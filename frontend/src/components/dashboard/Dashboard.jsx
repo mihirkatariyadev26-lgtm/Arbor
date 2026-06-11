@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Navbar";
 import "./dashboard.css";
 import DataSaverOnOutlinedIcon from "@mui/icons-material/DataSaverOnOutlined";
@@ -13,152 +13,127 @@ import { styled } from "@mui/material/styles";
 import Paper from "@mui/material/Paper";
 import { useNavigate } from "react-router-dom";
 import Help from "../help/help";
-import UserRepolist from "../repository/UserRepolist";
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: "#1d1a1acb",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "left",
-  color: (theme.vars ?? theme).palette.text.secondary,
-  ...theme.applyStyles("dark", {
-    backgroundColor: "transparent",
-    color: "#ffff",
-  }),
-}));
+import "../repository/UserRepolist.css";
+import axios from "axios";
+import PublicIcon from "@mui/icons-material/Public";
+import ShieldOutlinedIcon from "@mui/icons-material/ShieldOutlined";
+import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
+import StarOutlinedIcon from "@mui/icons-material/StarOutlined";
 
-function stringToColor(string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = "#";
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.slice(-2);
-  }
-
-  return color;
-}
-function stringAvatar(name) {
-  if (!name) return { sx: { bgcolor: "#000" }, children: "?" };
-  const nameParts = name.trim().split(" ");
-  let children = "";
-  if (nameParts.length === 1) {
-    children = nameParts[0][0].toUpperCase();
-  } else if (nameParts.length >= 2) {
-    children = `${nameParts[0][0]}${nameParts[1][0]}`.toUpperCase();
-  }
-
-  return {
-    sx: {
-      bgcolor: stringToColor(name),
-    },
-    children,
-  };
-}
-const CardCarousel = styled("div")(({ theme }) => ({
-  position: "relative",
-  width: "100%",
-  minHeight: "100%",
-  height: "80%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#1d1a1acb",
-  borderRadius: "8px",
-  padding: "16px 12px",
-  overflow: "hidden",
-  boxSizing: "border-box",
-  [theme.breakpoints.down("sm")]: {
-    minHeight: "120px",
-    padding: "12px 8px",
-  },
-}));
-
-const CardContainer = styled("div")({
-  position: "relative",
-  width: "100%",
-  height: "80%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  overflow: "hidden",
-});
-
-const CardWrapper = styled("div")(({ theme }) => ({
-  width: "100%",
-  height: "80%",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  backgroundColor: "#2d2a2a3f",
-  borderRadius: "1rem",
-  padding: "16px",
-  flexDirection: "column",
-  gap: "8px",
-  boxSizing: "border-box",
-  textAlign: "center",
-  [theme.breakpoints.down("sm")]: {
-    padding: "12px",
-  },
-}));
-
-const NavigationButton = styled("button")(({ theme }) => ({
-  position: "absolute",
-  top: "50%",
-  transform: "translateY(-50%)",
-  backgroundColor: "rgba(255, 255, 255, 0.1)",
-  border: "none",
-  color: "#ffffff",
-  cursor: "pointer",
-  padding: "10px",
-  borderRadius: "4px",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  zIndex: 10,
-  transition: "all 0.3s ease",
-  minWidth: "44px",
-  minHeight: "44px",
-  "&:hover": {
-    backgroundColor: "rgba(255, 255, 255, 0.2)",
-  },
-  "&:active": {
-    backgroundColor: "rgba(255, 255, 255, 0.15)",
-  },
-  [theme.breakpoints.down("sm")]: {
-    padding: "8px",
-    minWidth: "36px",
-    minHeight: "36px",
-  },
-}));
-
-const LeftButton = styled(NavigationButton)({
-  left: "8px",
-});
-
-const RightButton = styled(NavigationButton)({
-  right: "8px",
-});
 function Dashboard() {
   const navigate = useNavigate();
+  const [repoData, setRepodata] = useState([]);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const [list, setList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [staredRepos, setStaredRepos] = useState(() => {
+    const saved = localStorage.getItem("starRepos");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const map = {};
+        parsed.forEach((id) => {
+          map[id] = true;
+        });
+        return map;
+      } catch (e) {
+        console.log("Failed to parse starRepos from localStorage", e);
+      }
+    }
+    return {};
+  });
+  useEffect(() => {
+    const fetchUserRepo = async () => {
+      try {
+        setLoading(true);
+        const cleanid = localStorage
+          .getItem("userId")
+          .trim()
+          .replace(/['"]+/g, "");
+        // console.log(cleanid);
+        const res2 = await axios.get(
+          `https://arbor-backend-qr7t.onrender.com/repo/user/${cleanid}`,
+        );
+        setList(res2.data);
+        setLoading(false);
+        console.log(res2.data);
+        return res2.data;
+      } catch (e) {
+        console.log("error in fetching ", e);
+        setList([]);
+      } finally {
+        setLoading(false);
+      }
 
-  const handleNextCard = () => {
-    setCurrentCardIndex((prevIndex) =>
-      prevIndex === cards.length - 1 ? 0 : prevIndex + 1,
-    );
-  };
+      return list;
+    };
+    fetchUserRepo();
+  }, []);
 
-  const handlePrevCard = () => {
-    setCurrentCardIndex((prevIndex) =>
-      prevIndex === 0 ? cards.length - 1 : prevIndex - 1,
-    );
+  useEffect(() => {
+    const fetchReposData = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(
+          "https://arbor-backend-qr7t.onrender.com/repo/all",
+        );
+        setRepodata(res.data);
+      } catch (e) {
+        console.log("Error to get All repository", e);
+        setRepodata([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchUserStars = async () => {
+      try {
+        const userId = localStorage.getItem("userId");
+        if (!userId) return;
+        const res = await axios.get(
+          `https://arbor-backend-qr7t.onrender.com/getUserProfile/${userId}`,
+        );
+        const user = res.data;
+        if (user.starRepos && Array.isArray(user.starRepos)) {
+          localStorage.setItem("starRepos", JSON.stringify(user.starRepos));
+          const map = {};
+          user.starRepos.forEach((id) => {
+            map[id] = true;
+          });
+          setStaredRepos(map);
+        }
+      } catch (e) {
+        console.log("Error getting user profile", e);
+      }
+    };
+
+    fetchReposData();
+    fetchUserStars();
+  }, []);
+  const handelStarRepo = async (id) => {
+    try {
+      const res = await axios.post(
+        "https://arbor-backend-qr7t.onrender.com/repo/star",
+        {
+          repoId: id,
+          userId: localStorage.getItem("userId"),
+        },
+      );
+      const updatedUser = res.data;
+      if (updatedUser.starRepos && Array.isArray(updatedUser.starRepos)) {
+        localStorage.setItem(
+          "starRepos",
+          JSON.stringify(updatedUser.starRepos),
+        );
+        const map = {};
+        updatedUser.starRepos.forEach((repoId) => {
+          map[repoId] = true;
+        });
+        setStaredRepos(map);
+      }
+    } catch (e) {
+      console.log("Error in staring repository", e);
+    }
   };
 
   return (
@@ -192,20 +167,251 @@ function Dashboard() {
             </div>
           </div>
         </div>
-        <div className="grid">
-          <div className="Grid">
-            <Grid container spacing={2}>
-              <Grid size={3}>
-                <UserRepolist />
-              </Grid>
-              <Grid size={6} className="scroll">
-                <p>Suggested Repositories</p>
-                <Carousel />
-              </Grid>
-              <Grid size={3}>
-                <Help />
-              </Grid>
-            </Grid>
+        <div
+          style={{
+            height: "100%",
+            // border: "1px solid white",
+            width: "95%",
+            borderRadius: "2rem",
+            display: "flex",
+            justifyContent: "space-around",
+            paddingBlock: "1rem",
+            boxShadow: "0 0 3vh rgba(37, 50, 134, 0.511)",
+            marginBottom: "0.38rem",
+          }}>
+          <div
+            style={{
+              // border: "1px solid white",
+              boxShadow: "0 0 1vh rgba(255, 255, 255, 0.447)",
+              width: "25%",
+              borderRadius: "2rem",
+            }}>
+            <p
+              style={{
+                marginLeft: "0.25rem",
+                fontSize: "1.5rem",
+                textAlign: "center",
+                height: "fit-content",
+                width: "100%",
+                paddingTop: "1rem",
+                backgroundColor: "transparent",
+              }}>
+              Your Repositories
+            </p>
+            <div
+              style={{
+                marginTop: "1.5rem",
+                width: "95%",
+                height: "55vh",
+                display: "flex",
+                justifyContent: "center",
+                overflowY: "scroll",
+                scrollbarWidth: "none",
+                marginLeft: "0.5rem",
+                borderRadius: "1rem",
+                flexWrap: "wrap",
+                backgroundColor: "transparent",
+              }}>
+              {loading ? (
+                <p style={{ backgroundColor: "transparent" }}>
+                  Loading Repositories
+                </p>
+              ) : list.length > 0 ? (
+                list.map((e) => {
+                  return (
+                    <div
+                      key={e._id}
+                      className="repo"
+                      style={{ justifyContent: "space-between" }}
+                      onClick={() => {
+                        navigate(`/repo/${e._id}`);
+                      }}>
+                      {e.name}
+                      <div style={{ width: "10%", paddingRight: "1.25rem" }}>
+                        {e.visibility ? (
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                            }}>
+                            <PublicIcon />
+                            <span>Public</span>
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                            }}>
+                            <ShieldOutlinedIcon />
+                            <span>Privet</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p style={{ backgroundColor: "transparent" }}>
+                  No Repositories
+                </p>
+              )}
+            </div>
+          </div>
+          <div
+            style={{
+              // border: "1px solid white",
+              boxShadow: " 0 0 1vh rgba(255, 255, 255, 0.511)",
+              width: "70%",
+              borderRadius: "2rem",
+            }}>
+            <p
+              style={{
+                marginLeft: "0.25rem",
+                fontSize: "1.5rem",
+                textAlign: "center",
+                height: "fit-content",
+                width: "100%",
+                paddingTop: "1rem",
+                backgroundColor: "transparent",
+              }}>
+              All Repositories
+            </p>
+            <div
+              id="scrollable"
+              style={{
+                height: "55vh",
+                marginTop: "1rem",
+                // border: "1px solid white",
+                width: "95%",
+                marginInline: "2.5%",
+                borderRadius: "2rem",
+                overflowY: "scroll",
+                scrollbarWidth: "none",
+              }}>
+              {loading ? (
+                <p
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    alignContent: "center",
+                    textAlign: "center",
+                  }}>
+                  Fetching Repositories...
+                </p>
+              ) : repoData.length > 0 ? (
+                repoData.map((e) => {
+                  return (
+                    <div
+                      id="repository"
+                      key={e._id}
+                      style={{
+                        height: "fit-content",
+                        // border: "1px solid white",
+                        boxShadow: " 0 0 1vh rgba(255, 255, 255, 0.511)",
+                        marginTop: "1rem",
+                        marginBottom: "1rem",
+                        width: "95%",
+                        marginInline: "2.5%",
+                        borderRadius: "1rem",
+                        paddingBlock: "1rem",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.boxShadow =
+                          " 0 0 2vh rgba(18, 18, 184, 0.511)";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.boxShadow =
+                          " 0 0 1vh rgba(255, 255, 255, 0.511)";
+                      }}>
+                      <div
+                        id="name_star"
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          paddingInline: "1rem",
+                          backgroundColor: "transparent",
+                        }}>
+                        <div
+                          id="name"
+                          style={{ backgroundColor: "transparent" }}>
+                          <p
+                            style={{ fontSize: "1rem", zIndex: "100" }}
+                            onClick={() => {
+                              navigate(`/profile/${e.owner._id}`);
+                            }}>
+                            Posted By : {e.owner.username}
+                          </p>
+                          Repository Name : {e.name} <br />
+                          <p style={{ fontSize: "0.75rem" }}>
+                            Issues : {e.issues.length}
+                          </p>
+                        </div>
+                        <div id="star" style={{ marginRight: "5px" }}>
+                          {!staredRepos[e._id] ? (
+                            <StarBorderOutlinedIcon
+                              style={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                                fontSize: "2rem",
+                                marginRight: "1rem",
+                                transition: "all 0.2s ease",
+                              }}
+                              className="hover"
+                              onClick={() => handelStarRepo(e._id)}
+                            />
+                          ) : (
+                            <StarOutlinedIcon
+                              style={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                                fontSize: "2rem",
+                                marginRight: "1rem",
+                              }}
+                              className="hover"
+                              onClick={() => handelStarRepo(e._id)}
+                            />
+                          )}
+                        </div>
+                      </div>
+                      <div id="description" style={{ paddingInline: "1rem" }}>
+                        Description : {e.description}
+                      </div>
+                      <div id="Content" style={{ paddingInline: "1rem" }}>
+                        Content : {e.content}
+                      </div>
+                      <div
+                        id="Content"
+                        style={{
+                          paddingInline: "1rem",
+                          paddingBlock: "1rem",
+                          backgroundColor: "white",
+                          color: "black",
+                          width: "fit-content",
+                          marginLeft: "1rem",
+                          marginTop: "1rem",
+                          borderRadius: "2rem",
+                        }}
+                        onClick={() => {
+                          navigate(`/repo/${e._id}`);
+                        }}>
+                        Explore
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <p
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    alignContent: "center",
+                    textAlign: "center",
+                  }}>
+                  No Repository Found
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>

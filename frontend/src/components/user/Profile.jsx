@@ -54,6 +54,7 @@ function Profile() {
   const [loading, setLoading] = useState(true);
   const [userRepo, setUserRepo] = useState([]);
   const [userDetail, setUserDetail] = useState([]);
+  const navigate = useNavigate();
   const [follow, setFollow] = useState(() => {
     const saved = localStorage.getItem("followedUsers");
     if (saved) {
@@ -220,35 +221,38 @@ function Profile() {
                     </p>
                   </Stack>
                   <p>Repositories : {userRepo.length}</p>
-                  {userDetail._id !== localStorage.getItem("userId") &&
-                  follow[userDetail._id] ? (
-                    <div
-                      className="drawer unfollow"
-                      style={{
-                        width: "78%",
-                        paddingInline: "1.25rem",
-                        marginInline: "auto",
-                        marginTop: "1rem",
-                      }}
-                      onClick={() => {
-                        handleFollow(id);
-                      }}>
-                      Unfollow
-                    </div>
+                  {userDetail._id !== localStorage.getItem("userId") ? (
+                    follow[userDetail._id] ? (
+                      <div
+                        className="drawer unfollow"
+                        style={{
+                          width: "78%",
+                          paddingInline: "1.25rem",
+                          marginInline: "auto",
+                          marginTop: "1rem",
+                        }}
+                        onClick={() => {
+                          handleFollow(id);
+                        }}>
+                        Unfollow
+                      </div>
+                    ) : (
+                      <div
+                        className="drawer follow"
+                        style={{
+                          width: "78%",
+                          paddingInline: "1.25rem",
+                          marginInline: "auto",
+                          marginTop: "1rem",
+                        }}
+                        onClick={() => {
+                          handleFollow(id);
+                        }}>
+                        Follow
+                      </div>
+                    )
                   ) : (
-                    <div
-                      className="drawer follow"
-                      style={{
-                        width: "78%",
-                        paddingInline: "1.25rem",
-                        marginInline: "auto",
-                        marginTop: "1rem",
-                      }}
-                      onClick={() => {
-                        handleFollow(id);
-                      }}>
-                      Follow
-                    </div>
+                    ""
                   )}
                 </div>
                 {/* this is the drawer section */}
@@ -269,16 +273,7 @@ function Profile() {
                       alignItems: "end",
                       width: "100%",
                       marginBottom: "0px",
-                    }}>
-                    {userDetail._id === localStorage.getItem("userId") ? (
-                      <>
-                        <div className="drawer">Access Token</div>
-                        <div className="drawer">Feedback</div>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </div>
+                    }}></div>
                 </div>
               </Grid>
 
@@ -297,6 +292,9 @@ function Profile() {
                               fontSize: "1.2rem",
                               width: "30%",
                               backgroundColor: "transparent",
+                            }}
+                            onClick={() => {
+                              navigate(`/repo/${e._id}`);
                             }}>
                             {e.name}
                             <div
