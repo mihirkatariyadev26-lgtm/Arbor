@@ -17,7 +17,7 @@ const FileNode = ({ node, onSelectFile, level = 0 }) => {
   };
 
   return (
-    <div>
+    <div style={{ backgroundColor: "transparent" }}>
       {/* Current Row */}
       <div
         onClick={handleClick}
@@ -68,7 +68,7 @@ const FileNode = ({ node, onSelectFile, level = 0 }) => {
 
       {/* Recursive Children Rendering */}
       {isFolder && isOpen && node.children && (
-        <div>
+        <div style={{ backgroundColor: "transparent" }}>
           {node.children.map((childNode, index) => (
             <FileNode
               key={`${level}-${index}`}
@@ -107,16 +107,29 @@ const FileSidebar = ({ treeData, onSelectFile, isLoading }) => {
           fontSize: "12px",
           fontWeight: "bold",
           textTransform: "uppercase",
+          backgroundColor: "transparent",
         }}>
         Files
       </div>
 
       {isLoading ? (
-        <div style={{ color: "#8b949e", padding: "16px", fontSize: "14px" }}>
+        <div
+          style={{
+            color: "#8b949e",
+            padding: "16px",
+            fontSize: "14px",
+            backgroundColor: "transparent",
+          }}>
           Loading repository data...
         </div>
       ) : treeData.length === 0 ? (
-        <div style={{ color: "#8b949e", padding: "16px", fontSize: "14px" }}>
+        <div
+          style={{
+            color: "#8b949e",
+            padding: "16px",
+            fontSize: "14px",
+            backgroundColor: "transparent",
+          }}>
           No files found in this commit.
         </div>
       ) : (
@@ -236,6 +249,7 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
               display: "flex",
               flexDirection: "column",
               overflow: "hidden",
+              backgroundColor: "transparent",
             }}>
             {selectedFilePath ? (
               <>
@@ -247,12 +261,14 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
                     alignItems: "center",
                     borderBottom: "1px solid #30363d",
                     paddingBottom: "10px",
+                    backgroundColor: "transparent",
                   }}>
                   <span
                     style={{
                       fontSize: "16px",
                       fontWeight: "bold",
                       color: "#c9d1d9",
+                      backgroundColor: "transparent",
                     }}>
                     {selectedFilePath}
                   </span>
@@ -288,6 +304,7 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
                         fontSize: "1.25rem",
                         whiteSpace: "pre-wrap",
                         wordWrap: "break-word",
+                        backgroundColor: "transparent",
                       }}>
                       {fileContent}
                     </pre>
@@ -300,9 +317,14 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
                   color: "#8b949e",
                   marginTop: "100px",
                   textAlign: "center",
+                  backgroundColor: "transparent",
                 }}>
-                <h2>Welcome to Arbor</h2>
-                <p>Select a file from the sidebar to view its contents.</p>
+                <h2 style={{ backgroundColor: "transparent" }}>
+                  Welcome to Arbor
+                </h2>
+                <p style={{ backgroundColor: "transparent" }}>
+                  Select a file from the sidebar to view its contents.
+                </p>
               </div>
             )}
           </div>

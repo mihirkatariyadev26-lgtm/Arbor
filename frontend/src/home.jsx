@@ -39,8 +39,8 @@ function Home() {
               paddingInline: "1rem",
               justifyContent: "center",
             }}>
-            <p style={{ backgroundColor: "transparent" }}>
-              <p
+            <div style={{ backgroundColor: "transparent" }}>
+              <div
                 style={{
                   fontSize: "5rem",
                   fontWeight: "800",
@@ -49,8 +49,8 @@ function Home() {
                   backgroundColor: "transparent",
                 }}>
                 Build ,
-              </p>
-              <p
+              </div>
+              <div
                 style={{
                   backgroundColor: "transparent",
                   fontSize: "4.5rem",
@@ -62,8 +62,8 @@ function Home() {
                   style={{ backgroundColor: "transparent", fontSize: "3rem" }}>
                   And ,
                 </span>
-              </p>
-              <p
+              </div>
+              <div
                 style={{
                   backgroundColor: "transparent",
                   fontSize: "3rem",
@@ -74,7 +74,7 @@ function Home() {
                   color: "aqua",
                 }}>
                 Version Your Way
-              </p>
+              </div>
               <div
                 style={{
                   marginTop: "2rem",
@@ -100,7 +100,7 @@ function Home() {
                 }}>
                 Get Started
               </div>
-            </p>
+            </div>
           </div>
           <div
             id="img"

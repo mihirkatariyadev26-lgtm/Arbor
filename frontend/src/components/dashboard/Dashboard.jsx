@@ -78,6 +78,7 @@ function Dashboard() {
           "https://arbor-backend-qr7t.onrender.com/repo/all",
         );
         setRepodata(res.data);
+        console.log(repoData);
       } catch (e) {
         console.log("Error to get All repository", e);
         setRepodata([]);
@@ -203,8 +204,6 @@ function Dashboard() {
                 marginTop: "1.5rem",
                 width: "95%",
                 height: "55vh",
-                display: "flex",
-                justifyContent: "center",
                 overflowY: "scroll",
                 scrollbarWidth: "none",
                 marginLeft: "0.5rem",
@@ -213,7 +212,11 @@ function Dashboard() {
                 backgroundColor: "transparent",
               }}>
               {loading ? (
-                <p style={{ backgroundColor: "transparent" }}>
+                <p
+                  style={{
+                    backgroundColor: "transparent",
+                    textAlign: "center",
+                  }}>
                   Loading Repositories
                 </p>
               ) : list.length > 0 ? (
@@ -222,7 +225,10 @@ function Dashboard() {
                     <div
                       key={e._id}
                       className="repo"
-                      style={{ justifyContent: "space-between" }}
+                      style={{
+                        justifyContent: "space-between",
+                        marginLeft: "2.5%",
+                      }}
                       onClick={() => {
                         navigate(`/repo/${e._id}`);
                       }}>
@@ -301,6 +307,33 @@ function Dashboard() {
                 </p>
               ) : repoData.length > 0 ? (
                 repoData.map((e) => {
+                  const commitsArray = Array.isArray(e.commits)
+                    ? e.commits
+                    : [];
+                  // Count total commit entries (top-level array length)
+                  const commitsLength = commitsArray.length;
+
+                  // Collect all commit date strings found in the commit objects (handles multiple entries and nested arrays)
+                  const allDates = [];
+                  commitsArray.forEach((c) => {
+                    if (!c) return;
+                    if (c.commitDate) allDates.push(c.commitDate);
+                    // support nested arrays in case commit groups contain arrays
+                    if (Array.isArray(c.commits)) {
+                      c.commits.forEach(
+                        (nc) =>
+                          nc && nc.commitDate && allDates.push(nc.commitDate),
+                      );
+                    }
+                  });
+
+                  let latestCommitDate = "No commits";
+                  if (allDates.length > 0) {
+                    const latest = allDates.reduce((a, b) =>
+                      new Date(a) > new Date(b) ? a : b,
+                    );
+                    latestCommitDate = new Date(latest).toLocaleString();
+                  }
                   return (
                     <div
                       id="repository"
@@ -339,11 +372,17 @@ function Dashboard() {
                             style={{ fontSize: "1rem", zIndex: "100" }}
                             onClick={() => {
                               navigate(`/profile/${e.owner._id}`);
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.cursor = "pointer";
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.cursor = "arrow";
                             }}>
                             Posted By : {e.owner.username}
                           </p>
                           Repository Name : {e.name} <br />
-                          <p style={{ fontSize: "0.75rem" }}>
+                          <p style={{ fontSize: "1.05rem" }}>
                             Issues : {e.issues.length}
                           </p>
                         </div>
@@ -380,20 +419,33 @@ function Dashboard() {
                       <div id="Content" style={{ paddingInline: "1rem" }}>
                         Content : {e.content}
                       </div>
+                      <div id="count-commit" style={{ paddingInline: "1rem" }}>
+                        Commits: {commitsLength}
+                        <br />
+                        Latest Commit Date: {latestCommitDate}
+                      </div>
                       <div
                         id="Content"
                         style={{
-                          paddingInline: "1rem",
-                          paddingBlock: "1rem",
+                          paddingBlock: ".75rem",
                           backgroundColor: "white",
                           color: "black",
-                          width: "fit-content",
-                          marginLeft: "1rem",
+                          width: "10%",
+                          marginLeft: "89%",
+                          textAlign: "center",
+                          fontWeight: "800",
                           marginTop: "1rem",
                           borderRadius: "2rem",
+                          fontSize: "1.25rem",
                         }}
                         onClick={() => {
                           navigate(`/repo/${e._id}`);
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.cursor = "pointer";
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.cursor = "pointer";
                         }}>
                         Explore
                       </div>

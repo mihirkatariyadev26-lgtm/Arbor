@@ -93,6 +93,26 @@ const getIssue = async (req, res) => {
     return res.status(500).send("Internal Server Error");
   }
 };
+const closeIssue = async (req, res) => {
+  const issueId = req.query.issueId || req.body.issueId;
+  if (!issueId) {
+    return res.status(400).json({ message: "Missing issueId" });
+  }
+
+  try {
+    const issue = await Issue.findById(issueId);
+    if (!issue) {
+      return res.status(404).json({ message: "Issue not found" });
+    }
+
+    issue.status = "closed";
+    const updatedIssue = await issue.save();
+    return res.json(updatedIssue);
+  } catch (e) {
+    console.log("error while closing the issue", e);
+    return res.status(500).json({ message: "Internal Server Error" });
+  }
+};
 export const issueController = {
   createIssue,
   updateIssue,
@@ -100,4 +120,5 @@ export const issueController = {
   getAllIssues,
   getIssue,
   getIssueForRepository,
+  closeIssue,
 };

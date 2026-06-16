@@ -16,7 +16,7 @@ function IssuesPage() {
   const [data, setData] = useState([]);
   const [repoOwner, setRepoOwner] = useState([]);
   const [loading, setLoading] = useState(false);
-
+  const [isOpen, setIsOpen] = useState(false);
   useEffect(() => {
     const fetchRepoOwner = async () => {
       try {
@@ -50,6 +50,22 @@ function IssuesPage() {
       setData(response.data);
     } catch (e) {
       console.log("Error occured while deleting the issue", e);
+    }
+  };
+  const handleClose = async (issueId) => {
+    try {
+      const response = await axios.put(
+        `https://arbor-backend-qr7t.onrender.com/issue/close?issueId=${encodeURIComponent(issueId)}`,
+      );
+      const updatedIssue = response.data;
+      setData((prev) =>
+        prev.map((issue) =>
+          issue._id === updatedIssue._id ? updatedIssue : issue,
+        ),
+      );
+      setIsOpen(true);
+    } catch (e) {
+      console.log("error while closing the issue ", e);
     }
   };
   //TODO:ADD AUTHENTICATION AND MAKE PAGE FOR THE EDIT ISSUE AND IMPLEMENT CLOSE THE ISSUE AND DELETE THE ISSUE
@@ -216,32 +232,36 @@ function IssuesPage() {
                             Edit
                           </div>
                         )}
-                        {(e.owner === localStorage.getItem("userId") ||
-                          repoOwner === localStorage.getItem("userId")) && (
-                          <div
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              marginTop: "0.25rem",
-                              //   marginLeft: "2rem",
-                              cursor: "pointer",
-                              backgroundColor: "transparent",
-                              paddingInline: "1.5rem",
-                              fontSize: "1.05rem",
-                              paddingBlock: "0.75rem",
-                              borderRadius: "2rem",
-                            }}
-                            onMouseEnter={(e) =>
-                              (e.currentTarget.style.backgroundColor =
-                                "forestgreen")
-                            }
-                            onMouseLeave={(e) =>
-                              (e.currentTarget.style.backgroundColor =
-                                "transparent")
-                            }>
-                            Close
-                          </div>
-                        )}
+                        {e.status === "open" &&
+                          (e.owner === localStorage.getItem("userId") ||
+                            repoOwner === localStorage.getItem("userId")) && (
+                            <div
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                marginTop: "0.25rem",
+                                //   marginLeft: "2rem",
+                                cursor: "pointer",
+                                backgroundColor: "transparent",
+                                paddingInline: "1.5rem",
+                                fontSize: "1.05rem",
+                                paddingBlock: "0.75rem",
+                                borderRadius: "2rem",
+                              }}
+                              onMouseEnter={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "forestgreen")
+                              }
+                              onMouseLeave={(e) =>
+                                (e.currentTarget.style.backgroundColor =
+                                  "transparent")
+                              }
+                              onClick={() => {
+                                handleClose(e._id);
+                              }}>
+                              Close
+                            </div>
+                          )}
                       </div>
                     ) : (
                       ""

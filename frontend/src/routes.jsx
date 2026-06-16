@@ -12,6 +12,7 @@ import RepoPage from "./components/repository/RepoPage.jsx";
 import CreateIssue from "./components/issue/CreateIssue.jsx";
 import IssuesPage from "./components/issue/IssuesPage.jsx";
 import IssueEditPage from "./components/issue/IssueEditPage.jsx";
+import Help from "./components/help/help.jsx";
 const ProjectRoutes = () => {
   const { currentUser, setCurrentUser } = useAuth();
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ const ProjectRoutes = () => {
 
   let element = useRoutes([
     { path: "/", element: <Home /> },
+    { path: "/docs", element: <Help /> },
     { path: "/auth", element: <Login /> },
     { path: "/signup", element: <Signup /> },
     { path: "/dashboard", element: <Dashboard /> },

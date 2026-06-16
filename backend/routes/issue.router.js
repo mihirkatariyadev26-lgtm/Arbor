@@ -7,3 +7,4 @@ issueRourter.delete("/issue/delete/:id", issueController.deleteIssue);
 issueRourter.get("/issue/all/:id", issueController.getAllIssues);
 issueRourter.get("/issue/repo/:repoId", issueController.getIssueForRepository);
 issueRourter.get("/issue/:id", issueController.getIssue);
+issueRourter.put("/issue/close", issueController.closeIssue);

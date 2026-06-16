@@ -22,11 +22,9 @@
   align-items: center;
   /* border: 2px solid white; */
   background-color: rgba(0, 0, 0, 0.656);
-}
-.navbar:hover {
-  /* background-color: rgba(255, 255, 255, 0.215); */
   box-shadow: 0 0vh 4vh rgba(18, 18, 184, 0.511);
 }
+
 .Logo {
   display: flex;
   justify-content: space-between;
