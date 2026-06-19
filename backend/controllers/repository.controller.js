@@ -175,10 +175,10 @@ const starRepository = async (req, res) => {
   }
 };
 
-function buildNestedTree(flatPaths) {
+function buildNestedTree(fileEntries) {
   const root = [];
-  for (const item of flatPaths) {
-    const parts = item.split("/");
+  for (const item of fileEntries) {
+    const parts = item.path.split("/");
     let currentLevel = root;
     let accumulatedPath = "";
 
@@ -196,7 +196,12 @@ function buildNestedTree(flatPaths) {
           path: accumulatedPath,
           children: isFile ? null : [],
         };
+        if (isFile) {
+          existingNode.commitId = item.commitId;
+        }
         currentLevel.push(existingNode);
+      } else if (isFile) {
+        existingNode.commitId = item.commitId;
       }
 
       if (!isFile) {
@@ -282,7 +287,7 @@ async function getLatestCommitFromRemote(req, res) {
 }
 
 async function getRepositoryTree(req, res) {
-  // 1. Extract all three identifiers from the request URL
+  // Extract all three identifiers from the request URL
   const { userId, repoId, commitId } = req.params;
 
   if (!userId || !repoId || !commitId) {
@@ -290,8 +295,8 @@ async function getRepositoryTree(req, res) {
   }
 
   try {
-    // 2. Build the precise S3 prefix matching your push.js architecture
-    const targetPrefix = `users/${userId}/${repoId}/commits/${commitId}/`;
+    // Instead of querying just one commit, we list all commits for the repo
+    const targetPrefix = `users/${userId}/${repoId}/commits/`;
 
     const command = new ListObjectsV2Command({
       Bucket: getS3Bucket(),
@@ -306,12 +311,30 @@ async function getRepositoryTree(req, res) {
         .json({ message: "No files found for this commit." });
     }
 
-    // 3. Strip out the long AWS user/repo prefix so the frontend just gets the file tree
-    const flatPaths = data.Contents.map((obj) =>
-      obj.Key.replace(targetPrefix, ""),
-    ).filter((path) => path.trim() !== "");
+    const fileMap = new Map();
 
-    const structuredFolderTree = buildNestedTree(flatPaths);
+    for (const obj of data.Contents) {
+      if (!obj.Key) continue;
+      const relative = obj.Key.slice(targetPrefix.length);
+      const slashIndex = relative.indexOf("/");
+      if (slashIndex === -1) continue;
+
+      const fileCommitId = relative.slice(0, slashIndex);
+      const filePath = relative.slice(slashIndex + 1);
+      const lastModified = obj.LastModified || new Date(0);
+
+      const existing = fileMap.get(filePath);
+      if (!existing || lastModified > existing.lastModified) {
+        fileMap.set(filePath, { fileCommitId, lastModified });
+      }
+    }
+
+    const fileEntries = Array.from(fileMap.entries()).map(([path, fileData]) => ({
+      path,
+      commitId: fileData.fileCommitId,
+    }));
+
+    const structuredFolderTree = buildNestedTree(fileEntries);
 
     return res.status(200).json({ tree: structuredFolderTree });
   } catch (error) {

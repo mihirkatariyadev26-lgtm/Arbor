@@ -12,7 +12,7 @@ const FileNode = ({ node, onSelectFile, level = 0 }) => {
     if (isFolder) {
       setIsOpen(!isOpen);
     } else {
-      onSelectFile(node.path);
+      onSelectFile(node.path, node.commitId);
     }
   };
 
@@ -185,15 +185,16 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
   }, [userId, repoId, commitId]);
 
   // Handler for when a user clicks a specific file
-  const handleFileSelect = async (filePath) => {
+  const handleFileSelect = async (filePath, fileCommitId) => {
     setSelectedFilePath(filePath);
     setIsFileLoading(true);
     setFileError("");
     setFileContent("");
 
     try {
+      const targetCommitId = fileCommitId || commitId;
       // Must use encodeURIComponent to safely pass slashes (e.g., "src/app.js") in the query string
-      const url = `https://arbor-backend-qr7t.onrender.com/repo/file/${userId}/${repoId}/${commitId}?path=${encodeURIComponent(filePath)}`;
+      const url = `https://arbor-backend-qr7t.onrender.com/repo/file/${userId}/${repoId}/${targetCommitId}?path=${encodeURIComponent(filePath)}`;
 
       const response = await fetch(url);
       const data = await response.json();
