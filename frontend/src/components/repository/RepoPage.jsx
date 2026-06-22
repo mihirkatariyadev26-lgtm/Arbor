@@ -5,12 +5,10 @@ import axios from "axios";
 import { API_BASE, NO_CACHE_HEADERS } from "../../config/api";
 
 async function resolveLatestCommitId(repo) {
-  if (repo?.commits?.length > 0) {
-    return repo.commits[repo.commits.length - 1].latestCommit;
-  }
-
   const ownerId = repo?.owner?._id;
-  if (!ownerId || !repo?._id) return null;
+  if (!ownerId || !repo?._id) {
+    return repo?.commits?.at(-1)?.latestCommit || null;
+  }
 
   try {
     const { data } = await axios.get(
@@ -19,7 +17,7 @@ async function resolveLatestCommitId(repo) {
     );
     return data.latestCommit || null;
   } catch {
-    return null;
+    return repo?.commits?.at(-1)?.latestCommit || null;
   }
 }
 

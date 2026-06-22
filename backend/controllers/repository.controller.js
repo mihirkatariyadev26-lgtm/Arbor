@@ -4,6 +4,7 @@ import { Issue } from "../models/issuemodel.js";
 import { User } from "../models/usermodel.js";
 import { ListObjectsV2Command, GetObjectCommand } from "@aws-sdk/client-s3";
 import { s3, getS3Bucket } from "../config/aws-config.js";
+import { applyDelta } from "fossil-delta";
 const createRepository = async (req, res) => {
   const { owner, name, description, content, visibility, issues } = req.body;
   try {
@@ -268,6 +269,18 @@ async function getLatestCommitFromRemote(req, res) {
         .json({ message: "No commits found on remote storage." });
     }
 
+    for (const commitId of commitTimes.keys()) {
+      try {
+        const commitMeta = await getRemoteCommitMeta(userId, repoId, commitId);
+        const commitDate = new Date(commitMeta.date);
+        if (!Number.isNaN(commitDate.getTime())) {
+          commitTimes.set(commitId, commitDate);
+        }
+      } catch {
+        // Fall back to the S3 object timestamp when older commits have no metadata.
+      }
+    }
+
     let latestCommit = null;
     let latestTime = null;
     for (const [commitId, modifiedAt] of commitTimes) {
@@ -286,6 +299,91 @@ async function getLatestCommitFromRemote(req, res) {
   }
 }
 
+function remoteCommitKey(userId, repoId, commitId, filePath) {
+  return `users/${userId}/${repoId}/commits/${commitId}/${filePath.replace(/\\/g, "/")}`;
+}
+
+async function getRemoteObjectBuffer(userId, repoId, commitId, filePath) {
+  const command = new GetObjectCommand({
+    Bucket: getS3Bucket(),
+    Key: remoteCommitKey(userId, repoId, commitId, filePath),
+  });
+
+  const data = await s3.send(command);
+  const bytes = await data.Body.transformToByteArray();
+  return Buffer.from(bytes);
+}
+
+async function getRemoteCommitMeta(userId, repoId, commitId) {
+  const content = await getRemoteObjectBuffer(
+    userId,
+    repoId,
+    commitId,
+    "commit.json",
+  );
+  return JSON.parse(content.toString("utf-8"));
+}
+
+async function getFileSnapshotBuffer(userId, repoId, commitId, filePath) {
+  if (!commitId) {
+    const error = new Error("File not found in this commit.");
+    error.name = "NoSuchKey";
+    throw error;
+  }
+
+  const meta = await getRemoteCommitMeta(userId, repoId, commitId);
+  const fileMeta = meta.files?.[filePath];
+
+  if (!fileMeta) {
+    if (meta.parentCommit) {
+      return getFileSnapshotBuffer(userId, repoId, meta.parentCommit, filePath);
+    }
+    const error = new Error("File not found in this commit.");
+    error.name = "NoSuchKey";
+    throw error;
+  }
+
+  if (fileMeta.type === "unchanged") {
+    return getFileSnapshotBuffer(
+      userId,
+      repoId,
+      fileMeta.originalCommit || meta.parentCommit,
+      filePath,
+    );
+  }
+
+  if (fileMeta.type === "vcdiff") {
+    if (!meta.parentCommit) {
+      const error = new Error("Patch file is missing a parent commit.");
+      error.name = "InvalidCommit";
+      throw error;
+    }
+
+    const parentBuffer = await getFileSnapshotBuffer(
+      userId,
+      repoId,
+      meta.parentCommit,
+      filePath,
+    );
+    const deltaBuffer = await getRemoteObjectBuffer(
+      userId,
+      repoId,
+      commitId,
+      `${filePath}.vcdiff`,
+    );
+    return Buffer.from(
+      applyDelta(new Uint8Array(parentBuffer), new Uint8Array(deltaBuffer)),
+    );
+  }
+
+  return getRemoteObjectBuffer(
+    userId,
+    repoId,
+    fileMeta.originalCommit || commitId,
+    filePath,
+  );
+}
+
 async function getRepositoryTree(req, res) {
   // Extract all three identifiers from the request URL
   const { userId, repoId, commitId } = req.params;
@@ -295,44 +393,13 @@ async function getRepositoryTree(req, res) {
   }
 
   try {
-    // Instead of querying just one commit, we list all commits for the repo
-    const targetPrefix = `users/${userId}/${repoId}/commits/`;
-
-    const command = new ListObjectsV2Command({
-      Bucket: getS3Bucket(),
-      Prefix: targetPrefix,
-    });
-
-    const data = await s3.send(command);
-
-    if (!data.Contents || data.Contents.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No files found for this commit." });
-    }
-
-    const fileMap = new Map();
-
-    for (const obj of data.Contents) {
-      if (!obj.Key) continue;
-      const relative = obj.Key.slice(targetPrefix.length);
-      const slashIndex = relative.indexOf("/");
-      if (slashIndex === -1) continue;
-
-      const fileCommitId = relative.slice(0, slashIndex);
-      const filePath = relative.slice(slashIndex + 1);
-      const lastModified = obj.LastModified || new Date(0);
-
-      const existing = fileMap.get(filePath);
-      if (!existing || lastModified > existing.lastModified) {
-        fileMap.set(filePath, { fileCommitId, lastModified });
-      }
-    }
-
-    const fileEntries = Array.from(fileMap.entries()).map(([path, fileData]) => ({
-      path,
-      commitId: fileData.fileCommitId,
-    }));
+    const commitMeta = await getRemoteCommitMeta(userId, repoId, commitId);
+    const fileEntries = Object.keys(commitMeta.files || {})
+      .filter((filePath) => commitMeta.files[filePath].type !== "deleted")
+      .map((filePath) => ({
+        path: filePath,
+        commitId,
+      }));
 
     const structuredFolderTree = buildNestedTree(fileEntries);
 
@@ -358,20 +425,14 @@ const getFileContent = async (req, res) => {
   }
 
   try {
-    // 3. Construct the exact exact S3 key for this specific file
-    const targetKey = `users/${userId}/${repoId}/commits/${commitId}/${filePath}`;
+    const fileBuffer = await getFileSnapshotBuffer(
+      userId,
+      repoId,
+      commitId,
+      filePath,
+    );
+    const fileContent = fileBuffer.toString("utf-8");
 
-    const command = new GetObjectCommand({
-      Bucket: getS3Bucket(),
-      Key: targetKey,
-    });
-
-    const data = await s3.send(command);
-
-    // 4. AWS SDK v3 provides a handy method to convert the stream directly to a string
-    const fileContent = await data.Body.transformToString("utf-8");
-
-    // 5. Send the raw text content back to the frontend
     return res.status(200).json({ content: fileContent });
   } catch (error) {
     // AWS throws a specific error name if the file doesn't exist

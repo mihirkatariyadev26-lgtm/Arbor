@@ -145,6 +145,23 @@ export async function commitRepo(Message) {
       }
     }
 
+    // Identify files that were in the parent commit but are no longer in staging (deleted files)
+    if (parentCommitMeta && parentCommitMeta.files) {
+      for (const oldFilePath in parentCommitMeta.files) {
+        if (!fileTrackingMap[oldFilePath]) {
+          const oldFileMeta = parentCommitMeta.files[oldFilePath];
+          // Only mark as deleted if it wasn't already deleted in the parent
+          if (oldFileMeta.type !== "deleted") {
+            fileTrackingMap[oldFilePath] = {
+              type: "deleted",
+              hash: oldFileMeta.hash,
+              originalCommit: lastCommitId,
+            };
+          }
+        }
+      }
+    }
+
     // Save the new metadata blueprint
     await fs.writeFile(
       path.join(commitDir, "commit.json"),
