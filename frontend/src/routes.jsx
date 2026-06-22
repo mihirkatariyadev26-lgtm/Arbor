@@ -25,7 +25,7 @@ const ProjectRoutes = () => {
     }
     if (
       !token &&
-      !["/auth", "/signup", "/"].includes(window.location.pathname)
+      !["/auth", "/signup", "/", "/docs"].includes(window.location.pathname)
     ) {
       navigate("/auth");
     }

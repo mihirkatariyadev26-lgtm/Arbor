@@ -326,7 +326,7 @@ function Profile() {
                                   <ShieldOutlinedIcon />
                                   <span
                                     style={{ backgroundColor: "transparent" }}>
-                                    Privet
+                                    Private
                                   </span>
                                 </div>
                               )}
@@ -391,7 +391,7 @@ function Profile() {
                                         onChange={() => toggleVisibility(e._id)}
                                       />
                                     }
-                                    label={e.visibility ? "Public" : "Privet"}
+                                    label={e.visibility ? "Public" : "Private"}
                                   />
                                 </div>
                               </div>

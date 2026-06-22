@@ -179,7 +179,8 @@ const starRepository = async (req, res) => {
 function buildNestedTree(fileEntries) {
   const root = [];
   for (const item of fileEntries) {
-    const parts = item.path.split("/");
+    // Split by either forward slash or backslash to handle Windows and Unix paths
+    const parts = item.path.split(/[/\\]/);
     let currentLevel = root;
     let accumulatedPath = "";
 
@@ -194,7 +195,8 @@ function buildNestedTree(fileEntries) {
         existingNode = {
           name: part,
           type: isFile ? "file" : "folder",
-          path: accumulatedPath,
+          // For files, pass the exact original path so backend lookup works reliably
+          path: isFile ? item.path : accumulatedPath,
           children: isFile ? null : [],
         };
         if (isFile) {
@@ -203,6 +205,8 @@ function buildNestedTree(fileEntries) {
         currentLevel.push(existingNode);
       } else if (isFile) {
         existingNode.commitId = item.commitId;
+        // Make sure the path matches the raw commit entry
+        existingNode.path = item.path;
       }
 
       if (!isFile) {

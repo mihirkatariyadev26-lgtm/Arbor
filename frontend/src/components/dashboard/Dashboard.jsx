@@ -250,7 +250,7 @@ function Dashboard() {
                               alignItems: "center",
                             }}>
                             <ShieldOutlinedIcon />
-                            <span>Privet</span>
+                            <span>Private</span>
                           </div>
                         )}
                       </div>

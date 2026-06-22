@@ -29,6 +29,13 @@ function Navbar() {
             <div className="Name">ARBOR</div>
           </div>
           <div className="option-group">
+            <div
+              className="option"
+              onClick={() => {
+                navigate("/docs");
+              }}>
+              Docs
+            </div>
             {isLogedin ? (
               <div className="option" onClick={handleLogout}>
                 Logout
