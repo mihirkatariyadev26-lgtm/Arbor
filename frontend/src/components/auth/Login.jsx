@@ -79,7 +79,13 @@ function Login() {
               {loading ? "Loading..." : "Login"}
             </div>
             <p>
-              Do You want to Create an account ?<span>SignUp</span>
+              Do You want to Create an account ?
+              <span
+                onClick={() => {
+                  navigate("/signup");
+                }}>
+                SignUp
+              </span>
             </p>
           </Box>
         </div>
