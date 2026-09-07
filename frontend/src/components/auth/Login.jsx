@@ -22,7 +22,7 @@ function Login() {
         {
           password: password,
           email: email,
-        },
+        },  
       );
       const token = res.data.token;
       const userId = res.data.userId;

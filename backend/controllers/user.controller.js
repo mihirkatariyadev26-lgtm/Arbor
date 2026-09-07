@@ -152,7 +152,7 @@ const followUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     const isFollowing = user.followedUsers.some(
-      (id) => id.toString() === followingUser.toString()
+      (id) => id.toString() === followingUser.toString(),
     );
     if (isFollowing) {
       return await unfollowUser(req, res);

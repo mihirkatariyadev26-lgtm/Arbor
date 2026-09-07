@@ -10,7 +10,16 @@ export function getS3Bucket() {
 }
 
 export function getAwsRegion() {
-  return env("AWS_REGION") || "ap-south-1";
+  return env("AWS_REGION") || "auto";
+}
+
+export function getS3Endpoint() {
+  return (
+    env("CLOUDFLARE_R2_ENDPOINT") ||
+    env("CLOUDFRLARE_R2_ENDPOINT") ||
+    env("S3_ENDPOINT") ||
+    undefined
+  );
 }
 
 export function getAwsCredentials() {
@@ -22,5 +31,6 @@ export function getAwsCredentials() {
 
 export const s3 = new S3Client({
   region: getAwsRegion(),
+  endpoint: getS3Endpoint(),
   credentials: getAwsCredentials(),
 });
