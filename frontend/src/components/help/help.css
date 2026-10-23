@@ -1,49 +1,287 @@
 .docs-page {
+  --docs-bg: #080b09;
+  --docs-surface: #101612;
+  --docs-surface-raised: #151d17;
+  --docs-border: rgba(202, 227, 204, 0.13);
+  --docs-muted: #a1ada2;
+  --docs-green: #a6f28d;
+
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: black;
-  color: #f7f7f8;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(70, 119, 69, 0.18), transparent 42rem),
+    var(--docs-bg);
+  color: #f3f5f1;
+  font-family: Inter, Geist, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
+
 .docs-content {
   flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 2rem 1rem;
-}
-.docs-container {
-  width: 100%;
-  max-width: 900px;
-  background: transparent;
-  border-radius: 2rem;
-  padding: 2rem;
-  box-shadow: 0 6px 18px rgba(105, 107, 111, 0.468);
-}
-.docs-header {
-  margin: 0 0 1rem 0;
-  font-size: 1.75rem;
-  color: white;
-}
-.docs-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-.step {
-  padding: 1rem;
-  border-radius: 6px;
-  border: 1px solid #eef2f7;
-  margin-bottom: 0.75rem;
-  background: transparent;
-}
-.step strong {
   display: block;
-  font-weight: 600;
-  color: white;
-  margin-bottom: 0.25rem;
+  padding: clamp(2.5rem, 6vw, 5.5rem) 1.25rem 6rem;
 }
+
+.docs-container {
+  width: min(100%, 1080px);
+  margin: 0 auto;
+}
+
+.docs-hero {
+  max-width: 760px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.docs-kicker,
+.step-eyebrow,
+.step-visual figcaption span {
+  color: var(--docs-green);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.docs-kicker {
+  margin-bottom: 1.2rem;
+}
+
+.docs-header {
+  margin: 0;
+  color: #f4f7f1;
+  font-size: clamp(2.5rem, 6vw, 4.6rem);
+  font-weight: 650;
+  letter-spacing: -0.065em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.docs-intro {
+  max-width: 610px;
+  margin: 1.4rem auto 0;
+  color: var(--docs-muted);
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.docs-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.docs-meta span {
+  padding: 0.48rem 0.8rem;
+  border: 1px solid var(--docs-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.035);
+  color: #d1d9d0;
+  font-size: 0.8rem;
+}
+
+.docs-toc {
+  position: sticky;
+  top: 1rem;
+  z-index: 5;
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  gap: 0.35rem;
+  margin: 3rem auto 4.5rem;
+  padding: 0.5rem;
+  overflow-x: auto;
+  border: 1px solid var(--docs-border);
+  border-radius: 999px;
+  background: rgba(12, 17, 13, 0.9);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(16px);
+  scrollbar-width: thin;
+}
+
+.docs-toc a {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.58rem 0.75rem;
+  border-radius: 999px;
+  color: #c0c9c0;
+  font-size: 0.77rem;
+  text-decoration: none;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.docs-toc a:hover,
+.docs-toc a:focus-visible {
+  background: rgba(166, 242, 141, 0.12);
+  color: #f3f5f1;
+  outline: none;
+}
+
+.docs-toc a span {
+  color: var(--docs-green);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.68rem;
+}
+
+.docs-steps {
+  position: relative;
+}
+
+.docs-step {
+  display: grid;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  align-items: center;
+  gap: clamp(2rem, 6vw, 5.5rem);
+  padding: 3.25rem 0;
+  border-top: 1px solid var(--docs-border);
+  scroll-margin-top: 6rem;
+}
+
+.docs-step:nth-child(even) .step-copy {
+  order: 2;
+}
+
+.docs-step:nth-child(even) .step-visual {
+  order: 1;
+}
+
+.step-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  margin: 0 0 1rem;
+}
+
+.step-eyebrow span {
+  display: inline-grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 1px solid rgba(166, 242, 141, 0.35);
+  border-radius: 50%;
+  background: rgba(166, 242, 141, 0.08);
+  font-size: 0.65rem;
+  letter-spacing: 0;
+}
+
+.step-copy h2 {
+  margin: 0;
+  color: #f2f5ef;
+  font-size: clamp(1.8rem, 3.5vw, 2.65rem);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1.12;
+}
+
 .step-desc {
-  color: white;
-  font-size: 0.95rem;
+  margin: 1rem 0 0;
+  color: var(--docs-muted);
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+
+.step-commands {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1.3rem;
+}
+
+.step-commands code {
+  display: block;
+  overflow-x: auto;
+  padding: 0.78rem 0.95rem;
+  border: 1px solid var(--docs-border);
+  border-radius: 0.65rem;
+  background: #0b100c;
+  color: #d5f9c8;
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  white-space: pre;
+}
+
+.step-note {
+  margin: 1rem 0 0;
+  padding-left: 0.8rem;
+  border-left: 2px solid rgba(166, 242, 141, 0.55);
+  color: #b9c4b9;
+  font-size: 0.85rem;
+  line-height: 1.65;
+}
+
+.step-visual {
+  min-width: 0;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--docs-border);
+  border-radius: 1rem;
+  background: var(--docs-surface);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.step-visual img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 390px;
+  object-fit: contain;
+  background: #0d110e;
+}
+
+.step-visual figcaption {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--docs-border);
+  color: #dce4db;
+  font-size: 0.8rem;
+}
+
+.step-visual figcaption span {
+  font-size: 0.59rem;
+  white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .docs-content {
+    padding-inline: 1rem;
+  }
+
+  .docs-toc {
+    position: static;
+    width: 100%;
+    justify-content: flex-start;
+    margin: 2.5rem 0 2rem;
+    border-radius: 1rem;
+  }
+
+  .docs-step,
+  .docs-step:nth-child(even) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.6rem;
+    padding: 2.5rem 0;
+  }
+
+  .docs-step:nth-child(even) .step-copy,
+  .docs-step:nth-child(even) .step-visual {
+    order: initial;
+  }
+
+  .step-visual img {
+    max-height: 320px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .docs-toc a {
+    transition: none;
+  }
 }
