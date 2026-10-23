@@ -11,6 +11,12 @@ function Help() {
           <h1 className="docs-header">Documentation</h1>
           <ul className="docs-list">
             <li className="step">
+              <strong>npm i arbor-cli</strong>
+              <div className="step-desc">
+                Usage: Install the Package to access the commands
+              </div>
+            </li>
+            <li className="step">
               <strong>arbor init</strong>
               <div className="step-desc">
                 Usage: Initialise a new repository
