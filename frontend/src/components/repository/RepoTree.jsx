@@ -89,6 +89,7 @@ const FileNode = ({ node, onSelectFile, level = 0 }) => {
 const FileSidebar = ({ treeData, onSelectFile, isLoading }) => {
   return (
     <div
+      className="repo-file-sidebar"
       style={{
         width: "20%",
         height: "70vh",
@@ -215,6 +216,7 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
   return (
     <>
       <div
+        className="repo-viewer"
         style={{
           height: "100vh",
           backgroundColor: "#010409",
@@ -224,6 +226,7 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
         <Navbar />
         <IssueNav repoId={repoId} />
         <div
+          className="repo-tree-layout"
           style={{
             boxShadow: "0 0 2vh rgba(18, 18, 184, 0.511) ",
             display: "flex",
@@ -244,6 +247,7 @@ export default function RepositoryViewer({ userId, repoId, commitId }) {
 
           {/* Main Content Workspace */}
           <div
+            className="repo-workspace"
             style={{
               flex: 1,
               padding: "20px 40px",

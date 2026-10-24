@@ -39,6 +39,7 @@ function IssueNav() {
   };
   return (
     <div
+      className="issue-nav"
       style={{
         height: "8vh",
         width: "97%",
@@ -61,6 +62,7 @@ function IssueNav() {
       </div>
       {/* right Part */}
       <div
+        className="issue-nav-actions"
         style={{
           display: "flex",
           justifyContent: "space-around",

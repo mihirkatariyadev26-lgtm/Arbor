@@ -252,7 +252,58 @@
 
 @media (max-width: 760px) {
   .docs-content {
-    padding-inline: 1rem;
+    padding: 2.5rem 1rem 4rem;
+  }
+
+  .docs-page .navbar {
+    box-sizing: border-box;
+    width: 95%;
+    height: auto;
+    min-height: 0;
+    flex-wrap: nowrap;
+    flex: 0 0 auto;
+    gap: 0.35rem;
+    margin-top: 0.75rem;
+    padding: 0.45rem 0.55rem;
+    border-radius: 1.25rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .docs-page .navbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .docs-page .Logo {
+    align-items: center;
+    flex: 0 0 auto;
+    gap: 0.4rem;
+  }
+
+  .docs-page .logo {
+    width: 2rem;
+    height: 2rem;
+    flex: 0 0 auto;
+  }
+
+  .docs-page .Name {
+    font-size: clamp(1.1rem, 4.5vw, 1.6rem);
+  }
+
+  .docs-page .option-group {
+    width: auto;
+    height: auto;
+    flex: 0 0 auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 0.15rem;
+  }
+
+  .docs-page .option {
+    flex: 0 0 auto;
+    padding: 0.35rem 0.45rem;
+    font-size: 0.78rem;
+    white-space: nowrap;
   }
 
   .docs-toc {
@@ -261,6 +312,10 @@
     justify-content: flex-start;
     margin: 2.5rem 0 2rem;
     border-radius: 1rem;
+  }
+
+  .docs-toc a {
+    min-height: 2.5rem;
   }
 
   .docs-step,
@@ -277,6 +332,40 @@
 
   .step-visual img {
     max-height: 320px;
+  }
+}
+
+@media (max-width: 420px) {
+  .docs-content {
+    padding: 2rem 0.85rem 3rem;
+  }
+
+  .docs-kicker {
+    font-size: 0.65rem;
+  }
+
+  .docs-header {
+    font-size: clamp(2.1rem, 10vw, 2.5rem);
+  }
+
+  .docs-meta {
+    gap: 0.45rem;
+  }
+
+  .docs-meta span {
+    padding: 0.4rem 0.65rem;
+    font-size: 0.72rem;
+  }
+
+  .docs-step,
+  .docs-step:nth-child(even) {
+    gap: 1.25rem;
+    padding: 2rem 0;
+  }
+
+  .step-visual figcaption {
+    flex-wrap: wrap;
+    gap: 0.4rem 0.65rem;
   }
 }
 

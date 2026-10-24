@@ -169,6 +169,7 @@ function Dashboard() {
           </div>
         </div>
         <div
+          className="dashboard-panels"
           style={{
             height: "100%",
             // border: "1px solid white",
@@ -181,6 +182,7 @@ function Dashboard() {
             marginBottom: "0.38rem",
           }}>
           <div
+            className="dashboard-owned-panel"
             style={{
               // border: "1px solid white",
               boxShadow: "0 0 1vh rgba(255, 255, 255, 0.447)",
@@ -200,6 +202,7 @@ function Dashboard() {
               Your Repositories
             </p>
             <div
+              className="dashboard-owned-list"
               style={{
                 marginTop: "1.5rem",
                 width: "95%",
@@ -232,10 +235,13 @@ function Dashboard() {
                       onClick={() => {
                         navigate(`/repo/${e._id}`);
                       }}>
-                      {e.name}
+                      <span className="dashboard-owned-repo-name">
+                        {e.name}
+                      </span>
                       <div style={{ width: "10%", paddingRight: "1.25rem" }}>
                         {e.visibility ? (
                           <div
+                            className="dashboard-owned-repo-visibility"
                             style={{
                               display: "flex",
                               alignItems: "center",
@@ -245,6 +251,7 @@ function Dashboard() {
                           </div>
                         ) : (
                           <div
+                            className="dashboard-owned-repo-visibility"
                             style={{
                               display: "flex",
                               alignItems: "center",
@@ -265,6 +272,7 @@ function Dashboard() {
             </div>
           </div>
           <div
+            className="dashboard-all-panel"
             style={{
               // border: "1px solid white",
               boxShadow: " 0 0 1vh rgba(255, 255, 255, 0.511)",
@@ -336,6 +344,7 @@ function Dashboard() {
                   }
                   return (
                     <div
+                      className="dashboard-repo-card"
                       id="repository"
                       key={e._id}
                       style={{
@@ -358,6 +367,7 @@ function Dashboard() {
                           " 0 0 1vh rgba(255, 255, 255, 0.511)";
                       }}>
                       <div
+                        className="dashboard-repo-heading"
                         id="name_star"
                         style={{
                           display: "flex",
@@ -413,18 +423,28 @@ function Dashboard() {
                           )}
                         </div>
                       </div>
-                      <div id="description" style={{ paddingInline: "1rem" }}>
+                      <div
+                        className="dashboard-repo-description"
+                        id="description"
+                        style={{ paddingInline: "1rem" }}>
                         Description : {e.description}
                       </div>
-                      <div id="Content" style={{ paddingInline: "1rem" }}>
+                      <div
+                        className="dashboard-repo-content"
+                        id="Content"
+                        style={{ paddingInline: "1rem" }}>
                         Content : {e.content}
                       </div>
-                      <div id="count-commit" style={{ paddingInline: "1rem" }}>
+                      <div
+                        className="dashboard-repo-meta"
+                        id="count-commit"
+                        style={{ paddingInline: "1rem" }}>
                         Commits: {commitsLength}
                         <br />
                         Latest Commit Date: {latestCommitDate}
                       </div>
                       <div
+                        className="dashboard-repo-explore"
                         id="Content"
                         style={{
                           paddingBlock: ".75rem",

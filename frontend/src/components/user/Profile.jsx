@@ -333,6 +333,7 @@ function Profile() {
                             </div>
                           </div>
                           <div
+                            className="profile-repo-controls"
                             style={{
                               display: "flex",
                               alignItems: "center",
@@ -340,7 +341,9 @@ function Profile() {
                               width: "100%",
                               backgroundColor: "transparent",
                             }}>
-                            Issues :{e.issues.length}
+                            <span className="profile-repo-issue-count">
+                              Issues : {e.issues.length}
+                            </span>
                             {userDetail._id ===
                             localStorage.getItem("userId") ? (
                               <div

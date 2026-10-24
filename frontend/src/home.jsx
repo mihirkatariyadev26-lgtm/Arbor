@@ -8,6 +8,7 @@ function Home() {
     <div className="home">
       <Navbar />
       <div
+        className="home-hero"
         style={{
           width: "95%",
           height: "80%",

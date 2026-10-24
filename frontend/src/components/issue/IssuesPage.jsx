@@ -70,10 +70,11 @@ function IssuesPage() {
   };
   //TODO:ADD AUTHENTICATION AND MAKE PAGE FOR THE EDIT ISSUE AND IMPLEMENT CLOSE THE ISSUE AND DELETE THE ISSUE
   return (
-    <div style={{ height: "100vh" }}>
+    <div className="issues-page" style={{ height: "100vh" }}>
       <Navbar />
       <IssueNav />
       <div
+        className="issues-list"
         style={{
           height: "70vh",
           overflow: "scroll",
@@ -89,6 +90,7 @@ function IssuesPage() {
             data.map((e) => {
               return (
                 <div
+                  className="issue-card-wrap"
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -98,6 +100,7 @@ function IssuesPage() {
                   }}
                   key={e._id}>
                   <div
+                    className="issue-card"
                     style={{
                       width: "90%",
                       boxShadow: "0 0 1vh rgba(255, 255, 255, 0.511) ",
